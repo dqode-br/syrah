@@ -1,0 +1,3272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYRAH - Sistema ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --secondary-color: #efefef;
+            --dark-bg: #181a1b;
+            --card-bg: #23272b;
+            --border-color: #3a3f44;
+            --input-bg: #2c3034;
+            --text-muted: #a0a0a0;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --secondary-bg: #2c3034;
+            --hover-bg: #2c3034;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2a2f35 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-header h1 {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .login-form input {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-form label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-form button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 104, 255, 0.3);
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--secondary-color) !important;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ajuste específico para campos com máscara */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            color: var(--secondary-color) !important;
+            background-color: var(--input-bg) !important;
+        }
+
+        /* Ajuste para o placeholder das máscaras */
+        .jquery-mask-placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* Ajuste específico para campos de email */
+        input[type="email"] {
+            background-color: var(--input-bg) !important;
+            border: 2px solid var(--border-color) !important;
+        }
+
+        input[type="email"]:focus {
+            background-color: var(--input-bg) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2) !important;
+        }
+
+        /* Ajuste para os selects */
+        .form-select {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--secondary-color) !important;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select option {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ajuste para as tabelas */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table th {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Modals */
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 104, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            border: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--hover-bg);
+            border: var(--border-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Ajuste para os botões de ação nas tabelas */
+        .btn-action {
+            padding: 0.5rem;
+            margin: 0 0.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Main Layout */
+        #app {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            width: 120px;
+            height: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(0, 104, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .user-info {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .user-info .user-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info .user-email {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+            background-color: var(--dark-bg);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-card .value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos específicos dos modais do financeiro */
+        #contaReceberModal .modal-content,
+        #contaPagarModal .modal-content,
+        #remessaModal .modal-content,
+        #relatorioModal .modal-content {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para os cards do financeiro */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .card-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        .card-title {
+            color: var(--secondary-color);
+            margin: 0;
+        }
+
+        .card-body {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para as tabelas dentro dos cards */
+        .card .table {
+            color: var(--secondary-color);
+        }
+
+        .card .table thead th {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .card .table tbody tr {
+            background-color: var(--card-bg);
+        }
+
+        .card .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Estilos para os formulários dentro dos cards */
+        .card .form-control,
+        .card .form-select {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .card .form-control:focus,
+        .card .form-select:focus {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .card .form-label {
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para os botões dentro dos cards */
+        .card .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .card .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .card .btn-secondary {
+            background-color: var(--secondary-bg);
+            color: var(--secondary-color);
+        }
+
+        .card .btn-secondary:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Estilos para os status nas tabelas */
+        .status-pago {
+            color: var(--success-color);
+        }
+
+        .status-pendente {
+            color: var(--warning-color);
+        }
+
+        .status-atrasado {
+            color: var(--danger-color);
+        }
+
+        /* Estilos para os valores monetários */
+        .valor-receber {
+            color: var(--success-color);
+        }
+
+        .valor-pagar {
+            color: var(--danger-color);
+        }
+
+        /* Estilos para os modais do financeiro */
+        #contaReceberModal .modal-header,
+        #contaPagarModal .modal-header,
+        #remessaModal .modal-header,
+        #relatorioModal .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        #contaReceberModal .modal-body,
+        #contaPagarModal .modal-body,
+        #remessaModal .modal-body,
+        #relatorioModal .modal-body {
+            padding: 1.5rem;
+        }
+
+        #contaReceberModal .modal-footer,
+        #contaPagarModal .modal-footer,
+        #remessaModal .modal-footer,
+        #relatorioModal .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        #contaReceberModal .form-control,
+        #contaPagarModal .form-control,
+        #remessaModal .form-control,
+        #relatorioModal .form-control,
+        #contaReceberModal .form-select,
+        #contaPagarModal .form-select,
+        #remessaModal .form-select,
+        #relatorioModal .form-select {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        #contaReceberModal .form-control:focus,
+        #contaPagarModal .form-control:focus,
+        #remessaModal .form-control:focus,
+        #relatorioModal .form-control:focus,
+        #contaReceberModal .form-select:focus,
+        #contaPagarModal .form-select:focus,
+        #remessaModal .form-select:focus,
+        #relatorioModal .form-select:focus {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        #contaReceberModal .form-label,
+        #contaPagarModal .form-label,
+        #remessaModal .form-label,
+        #relatorioModal .form-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        #contaReceberModal .table,
+        #contaPagarModal .table,
+        #remessaModal .table,
+        #relatorioModal .table {
+            color: var(--secondary-color);
+        }
+
+        #contaReceberModal .table thead th,
+        #contaPagarModal .table thead th,
+        #remessaModal .table thead th,
+        #relatorioModal .table thead th {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        #contaReceberModal .table tbody tr,
+        #contaPagarModal .table tbody tr,
+        #remessaModal .table tbody tr,
+        #relatorioModal .table tbody tr {
+            background-color: var(--card-bg);
+        }
+
+        #contaReceberModal .table tbody tr:hover,
+        #contaPagarModal .table tbody tr:hover,
+        #remessaModal .table tbody tr:hover,
+        #relatorioModal .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        #contaReceberModal .form-check-input,
+        #contaPagarModal .form-check-input,
+        #remessaModal .form-check-input,
+        #relatorioModal .form-check-input {
+            background-color: var(--input-bg);
+            border-color: var(--border-color);
+        }
+
+        #contaReceberModal .form-check-input:checked,
+        #contaPagarModal .form-check-input:checked,
+        #remessaModal .form-check-input:checked,
+        #relatorioModal .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        #contaReceberModal .form-check-label,
+        #contaPagarModal .form-check-label,
+        #remessaModal .form-check-label,
+        #relatorioModal .form-check-label {
+            color: var(--secondary-color);
+        }
+
+        /* Estilo para campos desabilitados */
+        .form-control:disabled,
+        .form-control[readonly],
+        .form-select:disabled {
+            background-color: var(--input-bg);
+            opacity: 0.7;
+        }
+
+        /* Estilo para mensagens de erro */
+        .invalid-feedback {
+            color: var(--danger-color);
+        }
+
+        /* Estilo para campos obrigatórios */
+        .required-field::after {
+            content: "*";
+            color: var(--danger-color);
+            margin-left: 4px;
+        }
+
+        /* Estilos específicos para o modal de remessa */
+        #remessaModal .modal-content {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+
+        #remessaModal .modal-header {
+            background-color: var(--card-bg) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .modal-body {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .modal-footer {
+            background-color: var(--card-bg) !important;
+            border-top: 1px solid var(--border-color) !important;
+        }
+
+        #remessaModal .form-label {
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .form-control,
+        #remessaModal .form-select {
+            background-color: var(--input-bg) !important;
+            color: var(--secondary-color) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+
+        #remessaModal .form-control:focus,
+        #remessaModal .form-select:focus {
+            background-color: var(--input-bg) !important;
+            color: var(--secondary-color) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+        }
+
+        #remessaModal .table {
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .table thead th {
+            background-color: var(--card-bg) !important;
+            border-bottom: 2px solid var(--border-color) !important;
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .table tbody tr {
+            background-color: var(--card-bg) !important;
+        }
+
+        #remessaModal .table tbody tr:hover {
+            background-color: var(--hover-bg) !important;
+        }
+
+        #remessaModal .form-check-input {
+            background-color: var(--input-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        #remessaModal .form-check-input:checked {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        #remessaModal .form-check-label {
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%) !important;
+        }
+
+        #remessaModal .table-responsive {
+            background-color: var(--card-bg) !important;
+            border-radius: 0.375rem !important;
+            padding: 1rem !important;
+        }
+
+        #remessaModal .table {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+            margin-bottom: 0 !important;
+        }
+
+        #remessaModal .table thead {
+            background-color: var(--card-bg) !important;
+        }
+
+        #remessaModal .table thead th {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+            border-bottom: 2px solid var(--border-color) !important;
+            padding: 1rem !important;
+        }
+
+        #remessaModal .table tbody {
+            background-color: var(--card-bg) !important;
+        }
+
+        #remessaModal .table tbody tr {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+        }
+
+        #remessaModal .table tbody tr:hover {
+            background-color: var(--hover-bg) !important;
+        }
+
+        #remessaModal .table tbody td {
+            background-color: var(--card-bg) !important;
+            color: var(--secondary-color) !important;
+            border-color: var(--border-color) !important;
+            padding: 1rem !important;
+            vertical-align: middle !important;
+        }
+
+        #remessaModal .table tbody tr:nth-child(even) {
+            background-color: var(--hover-bg) !important;
+        }
+
+        #remessaModal .table tbody tr:nth-child(odd) {
+            background-color: var(--card-bg) !important;
+        }
+
+        #remessaModal .table tbody tr:nth-child(even):hover {
+            background-color: var(--hover-bg) !important;
+            opacity: 0.8 !important;
+        }
+
+        #remessaModal .table tbody tr:nth-child(odd):hover {
+            background-color: var(--hover-bg) !important;
+        }
+
+        .codigo-item {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .select2-container--default .select2-results__option .codigo-item {
+            color: #666;
+        }
+        
+        .table td:first-child {
+            color: #666;
+            font-weight: 500;
+        }
+
+        input[name="codigo"] {
+            background-color: #f8f9fa !important;
+            color: #666 !important;
+            font-style: italic;
+        }
+
+        /* Estilos para dropdowns no tema escuro */
+        .form-control, .form-select {
+            background-color: #2b3035;
+            border-color: #495057;
+            color: #e9ecef;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #2b3035;
+            border-color: #0d6efd;
+            color: #e9ecef;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+        }
+
+        .form-select option {
+            background-color: #2b3035;
+            color: #e9ecef;
+        }
+
+        /* Estilo para campos desabilitados */
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #343a40;
+            color: #6c757d;
+        }
+
+        /* Estilo para campos de documento */
+        .documento-field {
+            transition: all 0.3s ease;
+        }
+
+        .documento-field:disabled {
+            background-color: #343a40;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="assets/images/logo.svg" alt="SYRAH Logo" class="login-logo">
+            </div>
+            <form id="login" class="login-form">
+                <div class="mb-3">
+                    <label class="form-label">Usuário</label>
+                    <input type="email" class="form-control" id="loginUsername" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                <div class="text-center mt-3">
+                    <a href="#" class="text-white" onclick="showForgotPasswordModal(event)">Esqueci minha senha</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/logo.svg" alt="SYRAH Logo" class="sidebar-logo">
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showSection('dashboard')" class="active">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a></li>
+                <li><a href="#" onclick="showSection('clientes')">
+                    <i class="fas fa-users"></i> Clientes
+                </a></li>
+                <li><a href="#" onclick="showSection('fornecedores')">
+                    <i class="fas fa-truck"></i> Fornecedores
+                </a></li>
+                <li><a href="#" onclick="showSection('documentos')">
+                    <i class="fas fa-file-alt"></i> Documentos
+                </a></li>
+                <li><a href="#" onclick="showSection('financeiro')">
+                    <i class="fas fa-money-bill-wave"></i> Financeiro
+                </a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-name">Usuário Logado</div>
+                    <div class="user-email">usuario@email.com</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <div id="dashboard" class="content-section active">
+                <h2 class="mb-4">Dashboard</h2>
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <h3>Total de Clientes</h3>
+                        <div class="value">150</div>
+                        <div class="label">Clientes ativos</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Faturamento Mensal</h3>
+                        <div class="value">R$ 45.000</div>
+                        <div class="label">Mês atual</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Pedidos Pendentes</h3>
+                        <div class="value">12</div>
+                        <div class="label">Aguardando processamento</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Contas a Pagar</h3>
+                        <div class="value">R$ 15.000</div>
+                        <div class="label">Vencimento este mês</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clientes -->
+            <div id="clientes" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Clientes</h2>
+                    <button class="btn btn-primary" onclick="showModal('clienteModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>CNPJ/CPF</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fornecedores -->
+            <div id="fornecedores" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Fornecedores</h2>
+                    <button class="btn btn-primary" onclick="showModal('fornecedorModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>CNPJ</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fornecedoresList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Documentos -->
+            <div id="documentos" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Documentos</h2>
+                    <button class="btn btn-primary" onclick="showModal('documentoModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Número</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Cliente/Fornecedor</th>
+                                <th>Valor Total</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documentosList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Financeiro -->
+            <div id="financeiro" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Financeiro</h2>
+                    <div>
+                        <button class="btn btn-primary me-2" onclick="showModal('contaReceberModal')">
+                            <i class="fas fa-plus"></i> Incluir Conta a Receber
+                        </button>
+                        <button class="btn btn-primary me-2" onclick="showModal('contaPagarModal')">
+                            <i class="fas fa-plus"></i> Incluir Conta a Pagar
+                        </button>
+                        <button class="btn btn-primary me-2" onclick="showModal('remessaModal')">
+                            <i class="fas fa-file-export"></i> Gerar Remessa
+                        </button>
+                        <button class="btn btn-primary" onclick="showModal('relatorioModal')">
+                            <i class="fas fa-chart-bar"></i> Relatórios
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Contas a Receber</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contasReceberTable">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Contas a Pagar</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contasPagarTable">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modais -->
+    <!-- Cliente Modal -->
+    <div class="modal fade" id="clienteModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clienteForm" onsubmit="saveCliente(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nome*</label>
+                                <input type="text" class="form-control" name="nome" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="tipo_pessoa">Tipo de Pessoa</label>
+                                    <select class="form-select tipo-pessoa-select" id="tipo_pessoa" name="tipo_pessoa" required>
+                                        <option value="PF">Pessoa Física</option>
+                                        <option value="PJ">Pessoa Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" id="cpf_group">
+                                    <label for="cpf">CPF</label>
+                                    <input type="text" class="form-control cpf-mask documento-field" id="cpf" name="cpf" placeholder="000.000.000-00">
+                                </div>
+                                <div class="form-group" id="cnpj_group">
+                                    <label for="cnpj">CNPJ</label>
+                                    <input type="text" class="form-control cnpj-mask documento-field" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Email*</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Telefone*</label>
+                                <input type="tel" class="form-control" name="telefone" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Celular</label>
+                                <input type="tel" class="form-control" name="celular">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">CEP*</label>
+                                <input type="text" class="form-control" name="cep" required>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <label class="form-label">Endereço*</label>
+                                <input type="text" class="form-control" name="endereco" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Bairro*</label>
+                                <input type="text" class="form-control" name="bairro" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade*</label>
+                                <input type="text" class="form-control" name="cidade" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Estado*</label>
+                                <select class="form-select" name="estado" required>
+                                    <option value="">UF</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <!-- Adicionar outros estados -->
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">País*</label>
+                                <input type="text" class="form-control" name="pais" value="Brasil" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo de Cliente*</label>
+                                <select class="form-select" name="tipo_cliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PF">Pessoa Física</option>
+                                    <option value="PJ">Pessoa Jurídica</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Regime Tributário*</label>
+                                <select class="form-select" name="regime_tributario" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="SIMPLES">Simples Nacional</option>
+                                    <option value="LUCRO_PRESUMIDO">Lucro Presumido</option>
+                                    <option value="LUCRO_REAL">Lucro Real</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Limite de Crédito</label>
+                                <input type="text" class="form-control" name="limite_credito">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Prazo de Pagamento</label>
+                                <input type="number" class="form-control" name="prazo_pagamento" min="0" max="365">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="clienteForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fornecedor Modal -->
+    <div class="modal fade" id="fornecedorModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Fornecedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fornecedorForm" onsubmit="saveFornecedor(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nome*</label>
+                                <input type="text" class="form-control" name="nome" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="tipo_pessoa_fornecedor">Tipo de Pessoa</label>
+                                    <select class="form-select tipo-pessoa-select" id="tipo_pessoa_fornecedor" name="tipo_pessoa" data-prefixo="_fornecedor" required>
+                                        <option value="PF">Pessoa Física</option>
+                                        <option value="PJ">Pessoa Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" id="cpf_group_fornecedor">
+                                    <label for="cpf_fornecedor">CPF</label>
+                                    <input type="text" class="form-control cpf-mask documento-field" id="cpf_fornecedor" name="cpf" placeholder="000.000.000-00">
+                                </div>
+                                <div class="form-group" id="cnpj_group_fornecedor">
+                                    <label for="cnpj_fornecedor">CNPJ</label>
+                                    <input type="text" class="form-control cnpj-mask documento-field" id="cnpj_fornecedor" name="cnpj" placeholder="00.000.000/0000-00">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Inscrição Estadual</label>
+                                <input type="text" class="form-control" name="ie">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Email*</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Telefone*</label>
+                                <input type="tel" class="form-control" name="telefone" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Contato</label>
+                                <input type="text" class="form-control" name="contato">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">CEP*</label>
+                                <input type="text" class="form-control" name="cep" required>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <label class="form-label">Endereço*</label>
+                                <input type="text" class="form-control" name="endereco" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Bairro*</label>
+                                <input type="text" class="form-control" name="bairro" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade*</label>
+                                <input type="text" class="form-control" name="cidade" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Estado*</label>
+                                <select class="form-select" name="estado" required>
+                                    <option value="">UF</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <!-- Adicionar outros estados -->
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">País*</label>
+                                <input type="text" class="form-control" name="pais" value="Brasil" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo de Fornecedor*</label>
+                                <select class="form-select" name="tipo_fornecedor" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PRODUTOS">Produtos</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="AMBOS">Produtos e Serviços</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Regime Tributário*</label>
+                                <select class="form-select" name="regime_tributario" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="SIMPLES">Simples Nacional</option>
+                                    <option value="LUCRO_PRESUMIDO">Lucro Presumido</option>
+                                    <option value="LUCRO_REAL">Lucro Real</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Prazo de Entrega</label>
+                                <input type="number" class="form-control" name="prazo_entrega" min="0" max="365">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Prazo de Pagamento</label>
+                                <input type="number" class="form-control" name="prazo_pagamento" min="0" max="365">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="fornecedorForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documento Modal -->
+    <div class="modal fade" id="documentoModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Documento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="documentoForm" onsubmit="saveDocumento(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Data*</label>
+                                <input type="date" class="form-control" name="data" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tipo*</label>
+                                <select class="form-select" name="tipo" required>
+                                    <option value="NFE">Nota Fiscal Eletrônica</option>
+                                    <option value="NFS">Nota Fiscal de Serviço</option>
+                                    <option value="CTE">Conhecimento de Transporte</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Aprovado">Aprovado</option>
+                                    <option value="Rejeitado">Rejeitado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cliente*</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="clienteSearch" placeholder="Buscar cliente...">
+                                    <select class="form-select" name="cliente_id" required>
+                                        <option value="">Selecione um cliente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Valor Total*</label>
+                                <input type="number" class="form-control" name="valor_total" step="0.01" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Condição de Pagamento*</label>
+                                <select class="form-select" name="condicao_pagamento" required>
+                                    <option value="A Vista">A Vista</option>
+                                    <option value="30 Dias">30 Dias</option>
+                                    <option value="60 Dias">60 Dias</option>
+                                    <option value="90 Dias">90 Dias</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Itens*</label>
+                                <div id="itensDocumento">
+                                    <div class="row mb-2">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" placeholder="Código" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" placeholder="Descrição" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control" placeholder="Qtd" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control" placeholder="UN" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" class="form-control" placeholder="Valor Unit." required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control" placeholder="Total" readonly>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger" onclick="removeItem(this)">X</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="addItem()">Adicionar Item</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="integrarFinanceiro" name="integrar_financeiro">
+                                    <label class="form-check-label" for="integrarFinanceiro">
+                                        Integrar com Financeiro
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="opcoesFinanceiro" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Tipo de Conta*</label>
+                                    <select class="form-select" name="tipo_conta" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="RECEBER">Conta a Receber</option>
+                                        <option value="PAGAR">Conta a Pagar</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Forma de Pagamento*</label>
+                                    <select class="form-select" name="forma_pagamento" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="DINHEIRO">Dinheiro</option>
+                                        <option value="PIX">PIX</option>
+                                        <option value="BOLETO">Boleto</option>
+                                        <option value="CARTAO">Cartão</option>
+                                        <option value="TRANSFERENCIA">Transferência</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Categoria*</label>
+                                    <select class="form-select" name="categoria" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="VENDAS">Vendas</option>
+                                        <option value="SERVICOS">Serviços</option>
+                                        <option value="COMPRAS">Compras</option>
+                                        <option value="IMPOSTOS">Impostos</option>
+                                        <option value="OUTROS">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDocumento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Conta a Receber -->
+    <div class="modal fade" id="contaReceberModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Conta a Receber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contaReceberForm" onsubmit="saveContaReceber(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Descrição*</label>
+                                <input type="text" class="form-control" name="descricao" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Valor*</label>
+                                <input type="text" class="form-control" name="valor" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Vencimento*</label>
+                                <input type="date" class="form-control" name="vencimento" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PENDENTE">Pendente</option>
+                                    <option value="PAGO">Pago</option>
+                                    <option value="ATRASADO">Atrasado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Categoria*</label>
+                                <select class="form-select" name="categoria" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="VENDAS">Vendas</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="OUTROS">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Cliente*</label>
+                                <select class="form-select" name="cliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="CLI001">Empresa ABC Ltda</option>
+                                    <option value="CLI002">Comércio XYZ S.A.</option>
+                                    <option value="CLI003">Indústria 123 EIRELI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Forma de Recebimento*</label>
+                                <select class="form-select" name="forma_recebimento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="DINHEIRO">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="BOLETO">Boleto</option>
+                                    <option value="CARTAO">Cartão</option>
+                                    <option value="TRANSFERENCIA">Transferência</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Número do Documento</label>
+                                <input type="text" class="form-control" name="numero_documento">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data de Emissão</label>
+                                <input type="date" class="form-control" name="data_emissao">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <!-- Campos de conta a receber -->
+                        <div class="row">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="contaReceberForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Conta a Pagar -->
+    <div class="modal fade" id="contaPagarModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Conta a Pagar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contaPagarForm" onsubmit="saveContaPagar(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Descrição*</label>
+                                <input type="text" class="form-control" name="descricao" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Valor*</label>
+                                <input type="text" class="form-control" name="valor" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Vencimento*</label>
+                                <input type="date" class="form-control" name="vencimento" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PENDENTE">Pendente</option>
+                                    <option value="PAGO">Pago</option>
+                                    <option value="ATRASADO">Atrasado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Categoria*</label>
+                                <select class="form-select" name="categoria" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="COMPRAS">Compras</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="IMPOSTOS">Impostos</option>
+                                    <option value="FOLHA_PAGAMENTO">Folha de Pagamento</option>
+                                    <option value="OUTROS">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Fornecedor*</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fornecedorSearch" placeholder="Buscar fornecedor...">
+                                    <select class="form-select" name="fornecedor_id" required>
+                                        <option value="">Selecione um fornecedor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Forma de Pagamento*</label>
+                                <select class="form-select" name="forma_pagamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="DINHEIRO">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="BOLETO">Boleto</option>
+                                    <option value="CARTAO">Cartão</option>
+                                    <option value="TRANSFERENCIA">Transferência</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Número do Documento</label>
+                                <input type="text" class="form-control" name="numero_documento">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data de Emissão</label>
+                                <input type="date" class="form-control" name="data_emissao">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <!-- Campos de conta a pagar -->
+                        <div class="row">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="contaPagarForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Remessa -->
+    <div class="modal fade" id="remessaModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Gerar Remessa Bancária</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="remessaForm" onsubmit="gerarRemessa(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Banco*</label>
+                                <select class="form-select" name="banco" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="001">Banco do Brasil</option>
+                                    <option value="104">Caixa Econômica Federal</option>
+                                    <option value="033">Santander</option>
+                                    <option value="341">Itaú</option>
+                                    <option value="237">Bradesco</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data de Geração*</label>
+                                <input type="date" class="form-control" name="data_geracao" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Sequencial*</label>
+                                <input type="number" class="form-control" name="sequencial" required min="1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tipo de Remessa*</label>
+                                <select class="form-select" name="tipo_remessa" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="COBRANCA">Cobrança</option>
+                                    <option value="PAGAMENTO">Pagamento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Contas Selecionadas*</label>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="selectAll"></th>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                                <th>Tipo</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="checkbox" name="contas" value="1"></td>
+                                                <td>Aluguel Março</td>
+                                                <td>R$ 5.000,00</td>
+                                                <td>2024-03-10</td>
+                                                <td>PAGAR</td>
+                                                <td>PENDENTE</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="contas" value="2"></td>
+                                                <td>Venda de Produtos</td>
+                                                <td>R$ 12.500,00</td>
+                                                <td>2024-03-20</td>
+                                                <td>RECEBER</td>
+                                                <td>PENDENTE</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="remessaForm" class="btn btn-primary">Gerar Remessa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Relatórios -->
+    <div class="modal fade" id="relatorioModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Relatórios Financeiros</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="relatorioForm" onsubmit="gerarRelatorio(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Tipo de Relatório*</label>
+                                <select class="form-select" name="tipo_relatorio" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="FLUXO_CAIXA">Fluxo de Caixa</option>
+                                    <option value="CONTAS_RECEBER">Contas a Receber</option>
+                                    <option value="CONTAS_PAGAR">Contas a Pagar</option>
+                                    <option value="DRE">DRE</option>
+                                    <option value="BALANCO">Balanço</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data Inicial*</label>
+                                <input type="date" class="form-control" name="data_inicial" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data Final*</label>
+                                <input type="date" class="form-control" name="data_final" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Formato*</label>
+                                <select class="form-select" name="formato" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="EXCEL">Excel</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Filtros Adicionais</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="incluir_graficos" id="incluirGraficos">
+                                    <label class="form-check-label" for="incluirGraficos">
+                                        Incluir Gráficos
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="incluir_totais" id="incluirTotais">
+                                    <label class="form-check-label" for="incluirTotais">
+                                        Incluir Totais
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="relatorioForm" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Recuperação de Senha -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotPasswordModalLabel">Recuperar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="recoveryEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Enviar Link de Recuperação</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variáveis globais
+        const API_URL = 'http://localhost:8000';
+        let currentSection = 'dashboard';
+        let currentUser = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Garante que só a tela de login aparece ao abrir
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('app').style.display = 'none';
+
+            // Simular login
+            document.getElementById('login').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simular autenticação
+                currentUser = {
+                    username: email.split('@')[0], // Pega apenas a parte antes do @
+                    email: email
+                };
+                
+                // Atualizar informações do usuário na sidebar
+                    updateUserInfo(currentUser);
+                
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+                    loadDashboard();
+            });
+        });
+
+        // Função para atualizar as informações do usuário na sidebar
+        function updateUserInfo(user) {
+            document.querySelector('.user-info .user-name').textContent = user.username;
+            document.querySelector('.user-info .user-email').textContent = user.email;
+        }
+
+        // Função para mostrar o modal de recuperação de senha
+        function showForgotPasswordModal(event) {
+            event.preventDefault();
+            const modalElement = document.getElementById('forgotPasswordModal');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+
+        // Função para lidar com a recuperação de senha
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('recoveryEmail').value;
+            
+            try {
+                // Aqui você implementaria a chamada real para a API
+                alert('Link de recuperação enviado para seu email!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+                modal.hide();
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar link de recuperação');
+            }
+        }
+
+        // Função para mostrar seção
+        function showSection(section) {
+            // Esconde todas as seções
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.style.display = 'none';
+            });
+
+            // Mostra a seção selecionada
+            document.getElementById(section).style.display = 'block';
+
+            // Atualiza o menu ativo
+            document.querySelectorAll('.sidebar-menu a').forEach(a => {
+                a.classList.remove('active');
+            });
+            document.querySelector(`.sidebar-menu a[onclick="showSection('${section}')"]`).classList.add('active');
+
+            // Carrega os dados da seção
+            switch(section) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'clientes':
+                    loadClientes();
+                    break;
+                case 'fornecedores':
+                    loadFornecedores();
+                    break;
+                case 'documentos':
+                    loadDocumentos();
+                    break;
+                case 'financeiro':
+                    loadFinanceiro();
+                    break;
+            }
+        }
+
+        // Função para buscar próximo código de cliente
+        async function getNextClienteCode() {
+            try {
+                const response = await fetch('/api/cadastros/clientes/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'CLI0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'CLI0000000001';
+            }
+        }
+
+        // Função para buscar próximo código de fornecedor
+        async function getNextFornecedorCode() {
+            try {
+                const response = await fetch('/api/cadastros/fornecedores/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'FOR0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'FOR0000000001';
+            }
+        }
+
+        // Função para buscar próximo código de documento
+        async function getNextDocumentoCode() {
+            try {
+                const response = await fetch('/api/documentos/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'DOC0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'DOC0000000001';
+            }
+        }
+
+        // Função para mostrar modal
+        async function showModal(modalId) {
+            const modal = new bootstrap.Modal(document.getElementById(modalId));
+            
+            // Limpar formulários e buscar próximo código quando o modal for aberto
+            if (modalId === 'clienteModal') {
+                document.getElementById('clienteForm').reset();
+                const nextCode = await getNextClienteCode();
+                document.querySelector('#clienteForm input[name="codigo"]').value = nextCode;
+            } else if (modalId === 'fornecedorModal') {
+                document.getElementById('fornecedorForm').reset();
+                const nextCode = await getNextFornecedorCode();
+                document.querySelector('#fornecedorForm input[name="codigo"]').value = nextCode;
+            } else if (modalId === 'documentoModal') {
+                document.getElementById('documentoForm').reset();
+                const nextCode = await getNextDocumentoCode();
+                document.querySelector('#documentoForm input[name="codigo"]').value = nextCode;
+            }
+            
+            modal.show();
+        }
+
+        // Funções de carregamento de dados
+        async function loadDashboard() {
+            try {
+                const [clientes, fornecedores, documentos, contas] = await Promise.all([
+                    fetchData('/cadastros/clientes/'),
+                    fetchData('/cadastros/fornecedores/'),
+                    fetchData('/documentos/'),
+                    fetchData('/financeiro/contas/')
+                ]);
+
+                document.getElementById('totalClientes').textContent = clientes.length;
+                document.getElementById('totalFornecedores').textContent = fornecedores.length;
+                document.getElementById('totalDocumentos').textContent = documentos.length;
+                document.getElementById('totalContas').textContent = contas.length;
+            } catch (error) {
+                console.error('Erro ao carregar dashboard:', error);
+            }
+        }
+
+        async function loadClientes() {
+            try {
+                const clientes = await fetchData('/cadastros/clientes/');
+                const tbody = document.getElementById('clientesList');
+                tbody.innerHTML = '';
+
+                clientes.forEach(cliente => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${cliente.codigo}</span></td>
+                            <td>${cliente.nome}</td>
+                            <td>${cliente.cnpj_cpf}</td>
+                            <td>${cliente.email}</td>
+                            <td>${cliente.telefone}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editCliente(${cliente.id})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteCliente(${cliente.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+            }
+        }
+
+        async function loadFornecedores() {
+            try {
+                const fornecedores = await fetchData('/cadastros/fornecedores/');
+                const tbody = document.getElementById('fornecedoresList');
+                tbody.innerHTML = '';
+
+                fornecedores.forEach(fornecedor => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${fornecedor.codigo}</span></td>
+                            <td>${fornecedor.nome}</td>
+                            <td>${fornecedor.cnpj}</td>
+                            <td>${fornecedor.email}</td>
+                            <td>${fornecedor.telefone}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editFornecedor(${fornecedor.id})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteFornecedor(${fornecedor.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar fornecedores:', error);
+            }
+        }
+
+        async function loadDocumentos() {
+            try {
+                const documentos = await fetchData('/documentos/');
+                const tbody = document.getElementById('documentosList');
+                tbody.innerHTML = '';
+
+                documentos.forEach(documento => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${documento.codigo}</span></td>
+                            <td>${documento.numero}</td>
+                            <td>${new Date(documento.data).toLocaleDateString()}</td>
+                            <td>${documento.tipo}</td>
+                            <td>${documento.status}</td>
+                            <td>${documento.cliente_id ? 'Cliente' : 'Fornecedor'}</td>
+                            <td>R$ ${documento.valor_total.toFixed(2)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editDocumento(${documento.id})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteDocumento(${documento.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar documentos:', error);
+            }
+        }
+
+        // Função para carregar dados do financeiro
+        async function loadFinanceiro() {
+            try {
+                // Carregar contas a receber
+                const contasReceber = await fetchData('/financeiro/contas-receber/');
+                const tbodyReceber = document.getElementById('contasReceberTable');
+                tbodyReceber.innerHTML = '';
+                
+                contasReceber.forEach(conta => {
+                    tbodyReceber.innerHTML += `
+                        <tr>
+                            <td>${conta.descricao}</td>
+                            <td>R$ ${conta.valor}</td>
+                            <td>${new Date(conta.vencimento).toLocaleDateString()}</td>
+                            <td>${conta.status}</td>
+                        </tr>
+                    `;
+                });
+
+                // Carregar contas a pagar
+                const contasPagar = await fetchData('/financeiro/contas-pagar/');
+                const tbodyPagar = document.getElementById('contasPagarTable');
+                tbodyPagar.innerHTML = '';
+                
+                contasPagar.forEach(conta => {
+                    tbodyPagar.innerHTML += `
+                        <tr>
+                            <td>${conta.descricao}</td>
+                            <td>R$ ${conta.valor}</td>
+                            <td>${new Date(conta.vencimento).toLocaleDateString()}</td>
+                            <td>${conta.status}</td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar dados financeiros:', error);
+            }
+        }
+
+        // Função para gerar uniqkey
+        function generateUniqKey() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Função para salvar cliente
+        async function saveCliente(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Validar CPF/CNPJ
+            const tipoPessoa = formData.get('tipo_pessoa');
+            let documento = '';
+            
+            if (tipoPessoa === 'PF') {
+                documento = formData.get('cpf').replace(/\D/g, '');
+                if (documento.length !== 11) {
+                    alert('CPF inválido!');
+                    return;
+                }
+            } else {
+                documento = formData.get('cnpj').replace(/\D/g, '');
+                if (documento.length !== 14) {
+                    alert('CNPJ inválido!');
+                    return;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/cadastros/clientes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Cliente salvo com sucesso!');
+                    $('#clienteModal').modal('hide');
+                    loadClientes();
+                    loadClientesSelect();
+                } else {
+                    alert('Erro ao salvar cliente');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar cliente');
+            }
+        }
+
+        // Função para salvar fornecedor
+        async function saveFornecedor(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Validar CPF/CNPJ
+            const tipoPessoa = formData.get('tipo_pessoa');
+            let documento = '';
+            
+            if (tipoPessoa === 'PF') {
+                documento = formData.get('cpf').replace(/\D/g, '');
+                if (documento.length !== 11) {
+                    alert('CPF inválido!');
+                    return;
+                }
+            } else {
+                documento = formData.get('cnpj').replace(/\D/g, '');
+                if (documento.length !== 14) {
+                    alert('CNPJ inválido!');
+                    return;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/cadastros/fornecedores/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Fornecedor salvo com sucesso!');
+                    $('#fornecedorModal').modal('hide');
+                    loadFornecedores();
+                    loadFornecedoresSelect();
+                } else {
+                    alert('Erro ao salvar fornecedor');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar fornecedor');
+            }
+        }
+
+        // Função para salvar documento
+        async function saveDocumento(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            formData.append('uniqkey', generateUniqKey());
+            
+            try {
+                const response = await fetch('/api/documentos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Se a integração com o financeiro estiver marcada, criar a conta
+                    if (formData.get('integrar_financeiro') === 'on') {
+                        const contaData = {
+                            descricao: `Documento ${formData.get('numero')} - ${formData.get('tipo')}`,
+                            valor: formData.get('valor_total'),
+                            vencimento: formData.get('data'),
+                            tipo: formData.get('tipo_conta'),
+                            status: 'PENDENTE',
+                            categoria: formData.get('categoria'),
+                            forma_pagamento: formData.get('forma_pagamento'),
+                            documento_id: data.id
+                        };
+
+                        const contaResponse = await fetch('/api/financeiro/contas', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(contaData)
+                        });
+
+                        if (!contaResponse.ok) {
+                            throw new Error('Erro ao integrar com o financeiro');
+                        }
+                    }
+
+                    alert('Documento salvo com sucesso!');
+                    $('#documentoModal').modal('hide');
+                    loadDocumentos();
+                    loadFinanceiro();
+                } else {
+                    alert('Erro ao salvar documento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar documento: ' + error.message);
+            }
+        }
+
+        // Função para salvar conta a receber
+        async function saveContaReceber(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            formData.append('uniqkey', generateUniqKey());
+            
+            try {
+                const response = await fetch('/api/contas-receber', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    alert('Conta a receber salva com sucesso!');
+                    $('#contaReceberModal').modal('hide');
+                    loadFinanceiro();
+                } else {
+                    alert('Erro ao salvar conta a receber');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar conta a receber');
+            }
+        }
+
+        // Função para salvar conta a pagar
+        async function saveContaPagar(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            formData.append('uniqkey', generateUniqKey());
+            
+            try {
+                const response = await fetch('/api/contas-pagar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    alert('Conta a pagar salva com sucesso!');
+                    $('#contaPagarModal').modal('hide');
+                    loadFinanceiro();
+                } else {
+                    alert('Erro ao salvar conta a pagar');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar conta a pagar');
+            }
+        }
+
+        // Função para gerar remessa
+        async function gerarRemessa(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const contas = Array.from(formData.getAll('contas')).map(Number);
+            
+            try {
+                const response = await fetch('/api/remessa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        data_geracao: formData.get('data_geracao'),
+                        sequencial: formData.get('sequencial'),
+                        banco: formData.get('banco'),
+                        tipo_remessa: formData.get('tipo_remessa'),
+                        contas: contas
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Remessa gerada com sucesso!');
+                    $('#remessaModal').modal('hide');
+                    loadFinanceiro();
+                } else {
+                    alert('Erro ao gerar remessa');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao gerar remessa');
+            }
+        }
+
+        // Função para gerar relatório
+        async function gerarRelatorio(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch('/api/relatorios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `relatorio_${formData.get('tipo_relatorio')}.${formData.get('formato').toLowerCase()}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    $('#relatorioModal').modal('hide');
+                } else {
+                    alert('Erro ao gerar relatório');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao gerar relatório');
+            }
+        }
+
+        // Função para selecionar todas as contas na remessa
+        document.getElementById('selectAll')?.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('input[name="contas"]');
+            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        });
+
+        // Funções auxiliares
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                return [];
+            }
+        }
+
+        // Função para inicializar as máscaras
+        function initializeMasks() {
+            // Máscara para CNPJ
+            $('input[name="cnpj"]').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para CPF
+            $('input[name="cnpj_cpf"]').mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para telefone
+            $('input[name="telefone"]').mask('(00) 0000-0000', {
+                placeholder: "(__) ____-____",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para celular
+            $('input[name="celular"]').mask('(00) 00000-0000', {
+                placeholder: "(__) _____-____",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para CEP
+            $('input[name="cep"]').mask('00000-000', {
+                placeholder: "_____-___",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para valores monetários
+            $('input[name="valor_total"], input[name="valor"]').mask('000.000.000.000.000,00', {
+                reverse: true,
+                placeholder: "0,00",
+                clearIfNotMatch: true
+            });
+            
+            // Máscara para IE
+            $('input[name="ie"]').mask('000.000.000.000', {
+                placeholder: "___.___.___.___",
+                clearIfNotMatch: true
+            });
+        }
+
+        // Inicializar máscaras quando o documento estiver pronto
+        $(document).ready(function() {
+            initializeMasks();
+            
+            // Atualizar máscaras quando adicionar novos itens
+            $(document).on('focus', 'input[placeholder="Valor Unit."]', function() {
+                $(this).mask('000.000.000.000.000,00', {
+                    reverse: true,
+                    placeholder: "0,00",
+                    clearIfNotMatch: true
+                });
+            });
+        });
+
+        // Função para calcular o total dos itens
+        function calcularTotalItem(input) {
+            const row = input.closest('.row');
+            const quantidade = parseFloat(row.querySelector('input[placeholder="Qtd"]').value) || 0;
+            const valorUnitario = parseFloat(row.querySelector('input[placeholder="Valor Unit."]').value.replace(/\./g, '').replace(',', '.')) || 0;
+            const total = quantidade * valorUnitario;
+            row.querySelector('input[placeholder="Total"]').value = total.toFixed(2);
+        }
+
+        // Atualizar máscaras quando adicionar novos itens
+        function addItem() {
+            const itensContainer = document.getElementById('itensDocumento');
+            const newRow = document.createElement('div');
+            newRow.className = 'row mb-2';
+            newRow.innerHTML = `
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Código" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Descrição" required>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control" placeholder="Qtd" required onchange="calcularTotalItem(this)">
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" placeholder="UN" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Valor Unit." required onchange="calcularTotalItem(this)">
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control" placeholder="Total" readonly>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeItem(this)">X</button>
+                </div>
+            `;
+            itensContainer.appendChild(newRow);
+            
+            // Aplicar máscara ao novo campo de valor
+            $(newRow).find('input[placeholder="Valor Unit."]').mask('000.000.000.000.000,00', {
+                reverse: true,
+                placeholder: "0,00",
+                clearIfNotMatch: true
+            });
+        }
+
+        function removeItem(button) {
+            button.closest('.row').remove();
+        }
+
+        // Dados fictícios para clientes
+        const clientesFicticios = [
+            { codigo: 'CLI001', nome: 'Empresa ABC Ltda', cnpj_cpf: '12.345.678/0001-90', ie: '123.456.789.000', email: 'contato@empresaabc.com.br', telefone: '(11) 3333-4444', celular: '(11) 98765-4321', endereco: 'Rua das Flores, 123', bairro: 'Centro', cidade: 'São Paulo', estado: 'SP', cep: '01234-567' },
+            { codigo: 'CLI002', nome: 'Comércio XYZ S.A.', cnpj_cpf: '98.765.432/0001-10', ie: '987.654.321.000', email: 'vendas@comercioxyz.com.br', telefone: '(11) 4444-5555', celular: '(11) 91234-5678', endereco: 'Av. Paulista, 1000', bairro: 'Bela Vista', cidade: 'São Paulo', estado: 'SP', cep: '01310-100' },
+            { codigo: 'CLI003', nome: 'Indústria 123 EIRELI', cnpj_cpf: '45.678.901/0001-23', ie: '456.789.012.000', email: 'industria123@email.com.br', telefone: '(11) 5555-6666', celular: '(11) 99876-5432', endereco: 'Rua Industrial, 500', bairro: 'Vila Industrial', cidade: 'São Paulo', estado: 'SP', cep: '03045-000' }
+        ];
+
+        // Dados fictícios para fornecedores
+        const fornecedoresFicticios = [
+            { codigo: 'FOR001', nome: 'Distribuidora Comercial Ltda', cnpj: '23.456.789/0001-45', ie: '234.567.890.000', email: 'vendas@distribuidora.com.br', telefone: '(11) 2222-3333', celular: '(11) 97777-8888', endereco: 'Rua Comercial, 789', bairro: 'Vila Comercial', cidade: 'São Paulo', estado: 'SP', cep: '04567-890' },
+            { codigo: 'FOR002', nome: 'Indústria de Materiais S.A.', cnpj: '34.567.890/0001-56', ie: '345.678.901.000', email: 'industria@materiais.com.br', telefone: '(11) 3333-4444', celular: '(11) 96666-7777', endereco: 'Av. Industrial, 2000', bairro: 'Parque Industrial', cidade: 'São Paulo', estado: 'SP', cep: '05678-901' },
+            { codigo: 'FOR003', nome: 'Comércio de Peças EIRELI', cnpj: '56.789.012/0001-78', ie: '567.890.123.000', email: 'pecas@comercio.com.br', telefone: '(11) 4444-5555', celular: '(11) 95555-6666', endereco: 'Rua das Peças, 300', bairro: 'Vila das Peças', cidade: 'São Paulo', estado: 'SP', cep: '06789-012' }
+        ];
+
+        // Dados fictícios para documentos
+        const documentosFicticios = [
+            { numero: 'NFE001', data: '2024-03-15', tipo: 'NFE', status: 'APROVADO', cliente: 'Empresa ABC Ltda', valor_total: '15.750,00', observacoes: 'Venda de produtos eletrônicos' },
+            { numero: 'NFCE002', data: '2024-03-16', tipo: 'NFCE', status: 'PENDENTE', cliente: 'Comércio XYZ S.A.', valor_total: '8.320,50', observacoes: 'Venda de materiais de escritório' },
+            { numero: 'CTE003', data: '2024-03-17', tipo: 'CTE', status: 'APROVADO', cliente: 'Indústria 123 EIRELI', valor_total: '3.500,00', observacoes: 'Transporte de mercadorias' }
+        ];
+
+        // Dados fictícios para contas
+        const contasFicticias = [
+            { descricao: 'Aluguel Março', valor: '5.000,00', vencimento: '2024-03-10', tipo: 'PAGAR', status: 'PENDENTE', categoria: 'DESPESAS_FIXAS', forma_pagamento: 'BOLETO' },
+            { descricao: 'Venda de Produtos', valor: '12.500,00', vencimento: '2024-03-20', tipo: 'RECEBER', status: 'PENDENTE', categoria: 'VENDAS', forma_pagamento: 'PIX' },
+            { descricao: 'Salários', valor: '25.000,00', vencimento: '2024-03-25', tipo: 'PAGAR', status: 'PENDENTE', categoria: 'FOLHA_PAGAMENTO', forma_pagamento: 'TRANSFERENCIA' }
+        ];
+
+        // Função para carregar dados fictícios
+        function loadDadosFicticios() {
+            // Carregar clientes
+            const clientesTable = document.querySelector('#clientesTable tbody');
+            clientesTable.innerHTML = clientesFicticios.map(cliente => `
+                <tr>
+                    <td>${cliente.codigo}</td>
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.cnpj_cpf}</td>
+                    <td>${cliente.telefone}</td>
+                    <td>${cliente.email}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btn-action btn-edit" onclick="editCliente('${cliente.codigo}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-action btn-delete" onclick="deleteCliente('${cliente.codigo}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Carregar fornecedores
+            const fornecedoresTable = document.querySelector('#fornecedoresTable tbody');
+            fornecedoresTable.innerHTML = fornecedoresFicticios.map(fornecedor => `
+                <tr>
+                    <td>${fornecedor.codigo}</td>
+                    <td>${fornecedor.nome}</td>
+                    <td>${fornecedor.cnpj}</td>
+                    <td>${fornecedor.telefone}</td>
+                    <td>${fornecedor.email}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btn-action btn-edit" onclick="editFornecedor('${fornecedor.codigo}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-action btn-delete" onclick="deleteFornecedor('${fornecedor.codigo}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Carregar documentos
+            const documentosTable = document.querySelector('#documentosTable tbody');
+            documentosTable.innerHTML = documentosFicticios.map(doc => `
+                <tr>
+                    <td>${doc.numero}</td>
+                    <td>${doc.data}</td>
+                    <td>${doc.tipo}</td>
+                    <td>${doc.status}</td>
+                    <td>${doc.cliente}</td>
+                    <td>R$ ${doc.valor_total}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btn-action btn-edit" onclick="editDocumento('${doc.numero}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-action btn-delete" onclick="deleteDocumento('${doc.numero}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Carregar contas
+            const contasTable = document.querySelector('#contasTable tbody');
+            contasTable.innerHTML = contasFicticias.map(conta => `
+                <tr>
+                    <td>${conta.descricao}</td>
+                    <td>R$ ${conta.valor}</td>
+                    <td>${conta.vencimento}</td>
+                    <td>${conta.tipo}</td>
+                    <td>${conta.status}</td>
+                    <td>${conta.categoria}</td>
+                    <td>${conta.forma_pagamento}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btn-action btn-edit" onclick="editConta('${conta.descricao}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-action btn-delete" onclick="deleteConta('${conta.descricao}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Chamar a função quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDadosFicticios();
+        });
+
+        // Adicionar o script para controlar a exibição das opções financeiras
+        document.getElementById('integrarFinanceiro').addEventListener('change', function() {
+            const opcoesFinanceiro = document.getElementById('opcoesFinanceiro');
+            const camposFinanceiro = opcoesFinanceiro.querySelectorAll('select[required]');
+            
+            if (this.checked) {
+                opcoesFinanceiro.style.display = 'block';
+                camposFinanceiro.forEach(campo => campo.required = true);
+            } else {
+                opcoesFinanceiro.style.display = 'none';
+                camposFinanceiro.forEach(campo => campo.required = false);
+            }
+        });
+
+        // Adicionar o script para busca de clientes e fornecedores
+        // Função para carregar clientes no select
+        async function loadClientesSelect() {
+            try {
+                const clientes = await fetchData('/cadastros/clientes/');
+                const select = document.querySelector('select[name="cliente_id"]');
+                select.innerHTML = '<option value="">Selecione um cliente</option>';
+                
+                clientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.innerHTML = `<span class="codigo-item">${cliente.codigo}</span> - ${cliente.nome}`;
+                    option.dataset.codigo = cliente.codigo;
+                    option.dataset.nome = cliente.nome;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+            }
+        }
+
+        // Função para carregar fornecedores no select
+        async function loadFornecedoresSelect() {
+            try {
+                const fornecedores = await fetchData('/cadastros/fornecedores/');
+                const select = document.querySelector('select[name="fornecedor_id"]');
+                select.innerHTML = '<option value="">Selecione um fornecedor</option>';
+                
+                fornecedores.forEach(fornecedor => {
+                    const option = document.createElement('option');
+                    option.value = fornecedor.id;
+                    option.innerHTML = `<span class="codigo-item">${fornecedor.codigo}</span> - ${fornecedor.nome}`;
+                    option.dataset.codigo = fornecedor.codigo;
+                    option.dataset.nome = fornecedor.nome;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar fornecedores:', error);
+            }
+        }
+
+        // Função para filtrar clientes
+        function filterClientes(searchTerm) {
+            const select = document.querySelector('select[name="cliente_id"]');
+            const options = select.options;
+            
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const codigo = option.dataset.codigo || '';
+                const nome = option.dataset.nome || '';
+                const search = searchTerm.toLowerCase();
+                
+                if (codigo.toLowerCase().includes(search) || nome.toLowerCase().includes(search)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            }
+        }
+
+        // Função para filtrar fornecedores
+        function filterFornecedores(searchTerm) {
+            const select = document.querySelector('select[name="fornecedor_id"]');
+            const options = select.options;
+            
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const codigo = option.dataset.codigo || '';
+                const nome = option.dataset.nome || '';
+                const search = searchTerm.toLowerCase();
+                
+                if (codigo.toLowerCase().includes(search) || nome.toLowerCase().includes(search)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            }
+        }
+
+        // Adicionar event listeners para os campos de busca
+        document.getElementById('clienteSearch').addEventListener('input', function(e) {
+            filterClientes(e.target.value);
+        });
+
+        document.getElementById('fornecedorSearch').addEventListener('input', function(e) {
+            filterFornecedores(e.target.value);
+        });
+
+        // Carregar os selects quando os modais forem abertos
+        document.getElementById('documentoModal').addEventListener('show.bs.modal', function() {
+            loadClientesSelect();
+        });
+
+        document.getElementById('contaPagarModal').addEventListener('show.bs.modal', function() {
+            loadFornecedoresSelect();
+        });
+
+        // Inicializar a aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... existing code ...
+        });
+
+        // Função para aplicar máscara de CPF/CNPJ
+        function aplicarMascaraCPFCNPJ(input) {
+            const valor = input.value.replace(/\D/g, '');
+            const tipoCliente = document.querySelector('select[name="tipo_cliente"]').value;
+            
+            if (tipoCliente === 'PF') {
+                // Máscara de CPF
+                if (valor.length <= 11) {
+                    input.value = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+                }
+            } else {
+                // Máscara de CNPJ
+                if (valor.length <= 14) {
+                    input.value = valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+                }
+            }
+        }
+
+        // Função para validar CPF/CNPJ
+        function validarCPFCNPJ(valor) {
+            const tipoCliente = document.querySelector('select[name="tipo_cliente"]').value;
+            const numero = valor.replace(/\D/g, '');
+            
+            if (tipoCliente === 'PF') {
+                // Validação de CPF
+                if (numero.length !== 11) return false;
+                
+                // Verifica se todos os dígitos são iguais
+                if (/^(\d)\1{10}$/.test(numero)) return false;
+                
+                // Validação do primeiro dígito verificador
+                let soma = 0;
+                for (let i = 0; i < 9; i++) {
+                    soma += parseInt(numero.charAt(i)) * (10 - i);
+                }
+                let resto = 11 - (soma % 11);
+                let digitoVerificador1 = resto > 9 ? 0 : resto;
+                
+                if (digitoVerificador1 !== parseInt(numero.charAt(9))) return false;
+                
+                // Validação do segundo dígito verificador
+                soma = 0;
+                for (let i = 0; i < 10; i++) {
+                    soma += parseInt(numero.charAt(i)) * (11 - i);
+                }
+                resto = 11 - (soma % 11);
+                let digitoVerificador2 = resto > 9 ? 0 : resto;
+                
+                return digitoVerificador2 === parseInt(numero.charAt(10));
+            } else {
+                // Validação de CNPJ
+                if (numero.length !== 14) return false;
+                
+                // Verifica se todos os dígitos são iguais
+                if (/^(\d)\1{13}$/.test(numero)) return false;
+                
+                // Validação do primeiro dígito verificador
+                let tamanho = numero.length - 2;
+                let numeros = numero.substring(0, tamanho);
+                let digitos = numero.substring(tamanho);
+                let soma = 0;
+                let pos = tamanho - 7;
+                
+                for (let i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2) pos = 9;
+                }
+                
+                let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado !== parseInt(digitos.charAt(0))) return false;
+                
+                // Validação do segundo dígito verificador
+                tamanho = tamanho + 1;
+                numeros = numero.substring(0, tamanho);
+                soma = 0;
+                pos = tamanho - 7;
+                
+                for (let i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2) pos = 9;
+                }
+                
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                return resultado === parseInt(digitos.charAt(1));
+            }
+        }
+
+        // Adicionar event listeners para o campo de CPF/CNPJ
+        document.querySelector('select[name="tipo_cliente"]').addEventListener('change', function() {
+            const cpfCnpjInput = document.querySelector('input[name="cnpj_cpf"]');
+            cpfCnpjInput.value = ''; // Limpa o campo
+            cpfCnpjInput.placeholder = this.value === 'PF' ? '000.000.000-00' : '00.000.000/0000-00';
+            cpfCnpjInput.maxLength = this.value === 'PF' ? 14 : 18;
+        });
+
+        document.querySelector('input[name="cnpj_cpf"]').addEventListener('input', function(e) {
+            aplicarMascaraCPFCNPJ(this);
+        });
+
+        // Inicialização das máscaras e controles de tipo de pessoa
+        $(document).ready(function() {
+            // Função para controlar visibilidade dos campos CPF/CNPJ
+            function controlarCamposDocumento() {
+                const tipoPessoa = $('#tipo_pessoa').val();
+                if (tipoPessoa === 'PF') {
+                    $('#cpf_group').show();
+                    $('#cnpj_group').hide();
+                    $('#cpf').prop('required', true);
+                    $('#cnpj').prop('required', false);
+                } else {
+                    $('#cpf_group').hide();
+                    $('#cnpj_group').show();
+                    $('#cpf').prop('required', false);
+                    $('#cnpj').prop('required', true);
+                }
+            }
+
+            // Aplicar máscaras
+            $('#cpf').mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true
+            });
+            
+            $('#cnpj').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__"
+            });
+
+            // Controlar campos quando o tipo de pessoa muda
+            $('#tipo_pessoa').on('change', function() {
+                controlarCamposDocumento();
+            });
+
+            // Controlar campos quando o modal é aberto
+            $('#clienteModal').on('show.bs.modal', function() {
+                controlarCamposDocumento();
+            });
+
+            // Aplicar controle inicial
+            controlarCamposDocumento();
+        });
+
+        // Inicialização das máscaras e controles de tipo de pessoa para fornecedores
+        $(document).ready(function() {
+            // Função para controlar visibilidade dos campos CPF/CNPJ do fornecedor
+            function controlarCamposDocumentoFornecedor() {
+                const tipoPessoa = $('#tipo_pessoa_fornecedor').val();
+                if (tipoPessoa === 'PF') {
+                    $('#cpf_group_fornecedor').show();
+                    $('#cnpj_group_fornecedor').hide();
+                    $('#cpf_fornecedor').prop('required', true);
+                    $('#cnpj_fornecedor').prop('required', false);
+                } else {
+                    $('#cpf_group_fornecedor').hide();
+                    $('#cnpj_group_fornecedor').show();
+                    $('#cpf_fornecedor').prop('required', false);
+                    $('#cnpj_fornecedor').prop('required', true);
+                }
+            }
+
+            // Aplicar máscaras para fornecedores
+            $('#cpf_fornecedor').mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true
+            });
+            
+            $('#cnpj_fornecedor').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__"
+            });
+
+            // Controlar campos quando o tipo de pessoa muda
+            $('#tipo_pessoa_fornecedor').on('change', function() {
+                controlarCamposDocumentoFornecedor();
+            });
+
+            // Controlar campos quando o modal é aberto
+            $('#fornecedorModal').on('show.bs.modal', function() {
+                controlarCamposDocumentoFornecedor();
+            });
+
+            // Aplicar controle inicial
+            controlarCamposDocumentoFornecedor();
+        });
+
+        // Função para controlar campos de documento
+        function controlarCamposDocumento(tipo, prefixo = '') {
+            const cpfGroup = $(`#cpf_group${prefixo}`);
+            const cnpjGroup = $(`#cnpj_group${prefixo}`);
+            const cpfInput = $(`#cpf${prefixo}`);
+            const cnpjInput = $(`#cnpj${prefixo}`);
+
+            if (tipo === 'PF') {
+                cpfGroup.show();
+                cnpjGroup.hide();
+                cpfInput.prop('required', true).prop('disabled', false);
+                cnpjInput.prop('required', false).prop('disabled', true).val('');
+            } else {
+                cpfGroup.hide();
+                cnpjGroup.show();
+                cpfInput.prop('required', false).prop('disabled', true).val('');
+                cnpjInput.prop('required', true).prop('disabled', false);
+            }
+        }
+
+        // Inicialização das máscaras e controles
+        $(document).ready(function() {
+            // Máscaras para CPF e CNPJ
+            $('#cpf').mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true
+            });
+            $('#cpf_fornecedor').mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true
+            });
+            $('#cnpj').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__",
+                clearIfNotMatch: true
+            });
+            $('#cnpj_fornecedor').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__",
+                clearIfNotMatch: true
+            });
+
+            // Função para controlar campos de documento
+            function controlarCamposDocumento(tipo, prefixo = '') {
+                const cpfGroup = $(`#cpf_group${prefixo}`);
+                const cnpjGroup = $(`#cnpj_group${prefixo}`);
+                const cpfInput = $(`#cpf${prefixo}`);
+                const cnpjInput = $(`#cnpj${prefixo}`);
+
+                if (tipo === 'PF') {
+                    cpfGroup.show();
+                    cnpjGroup.hide();
+                    cpfInput.prop('required', true).prop('disabled', false);
+                    cnpjInput.prop('required', false).prop('disabled', true).val('');
+                } else {
+                    cpfGroup.hide();
+                    cnpjGroup.show();
+                    cpfInput.prop('required', false).prop('disabled', true).val('');
+                    cnpjInput.prop('required', true).prop('disabled', false);
+                }
+            }
+
+            // Eventos para tipo de pessoa
+            $('.tipo-pessoa-select').on('change', function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+
+            // Inicializar controles quando modais são abertos
+            $('#clienteModal, #fornecedorModal').on('show.bs.modal', function() {
+                const prefixo = $(this).attr('id') === 'clienteModal' ? '' : '_fornecedor';
+                const tipoPessoa = $(`#tipo_pessoa${prefixo}`).val();
+                controlarCamposDocumento(tipoPessoa, prefixo);
+            });
+
+            // Inicializar controles
+            $('.tipo-pessoa-select').each(function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+        });
+
+        // Função para aplicar máscara de CPF
+        function aplicarMascaraCPF(campo) {
+            $(campo).mask('000.000.000-00', {
+                placeholder: "___.___.___-__",
+                clearIfNotMatch: true,
+                reverse: false
+            });
+        }
+
+        // Inicialização
+        $(document).ready(function() {
+            // Aplicar máscara quando o campo receber foco
+            $('#cpf, #cpf_fornecedor').on('focus', function() {
+                aplicarMascaraCPF(this);
+            });
+
+            // Aplicar máscara inicialmente
+            aplicarMascaraCPF('#cpf');
+            aplicarMascaraCPF('#cpf_fornecedor');
+
+            // Máscara para CNPJ
+            $('#cnpj, #cnpj_fornecedor').mask('00.000.000/0000-00', {
+                placeholder: "__.___.___/____-__",
+                clearIfNotMatch: true,
+                reverse: false
+            });
+
+            // Função para controlar campos de documento
+            function controlarCamposDocumento(tipo, prefixo = '') {
+                const cpfGroup = $(`#cpf_group${prefixo}`);
+                const cnpjGroup = $(`#cnpj_group${prefixo}`);
+                const cpfInput = $(`#cpf${prefixo}`);
+                const cnpjInput = $(`#cnpj${prefixo}`);
+
+                if (tipo === 'PF') {
+                    cpfGroup.show();
+                    cnpjGroup.hide();
+                    cpfInput.prop('required', true).prop('disabled', false);
+                    cnpjInput.prop('required', false).prop('disabled', true).val('');
+                } else {
+                    cpfGroup.hide();
+                    cnpjGroup.show();
+                    cpfInput.prop('required', false).prop('disabled', true).val('');
+                    cnpjInput.prop('required', true).prop('disabled', false);
+                }
+            }
+
+            // Eventos para tipo de pessoa
+            $('.tipo-pessoa-select').on('change', function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+
+            // Inicializar controles quando modais são abertos
+            $('#clienteModal, #fornecedorModal').on('show.bs.modal', function() {
+                const prefixo = $(this).attr('id') === 'clienteModal' ? '' : '_fornecedor';
+                const tipoPessoa = $(`#tipo_pessoa${prefixo}`).val();
+                controlarCamposDocumento(tipoPessoa, prefixo);
+            });
+
+            // Inicializar controles
+            $('.tipo-pessoa-select').each(function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+        });
+    </script>
+</body>
+</html> 

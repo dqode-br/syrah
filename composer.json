@@ -1,0 +1,27 @@
+{
+    "name": "syrah/erp",
+    "description": "Sistema ERP desenvolvido em PHP com MySQL",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Syrah\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SYRAH Team",
+            "email": "contato@syrah.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+} 

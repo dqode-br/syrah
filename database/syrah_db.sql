@@ -1,0 +1,69 @@
+-- Criar o banco de dados
+CREATE DATABASE IF NOT EXISTS syrah_db;
+USE syrah_db;
+
+-- Tabela de usuários
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    cnpj_cpf VARCHAR(20) NOT NULL,
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    endereco TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de fornecedores
+CREATE TABLE IF NOT EXISTS fornecedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    cnpj_cpf VARCHAR(20) NOT NULL,
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    endereco TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de documentos
+CREATE TABLE IF NOT EXISTS documentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    tipo VARCHAR(50) NOT NULL,
+    descricao TEXT,
+    data_emissao DATE,
+    valor DECIMAL(10,2),
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de contas financeiras
+CREATE TABLE IF NOT EXISTS contas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    descricao VARCHAR(100) NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    data_vencimento DATE,
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Inserir usuário padrão (senha: admin123)
+INSERT INTO usuarios (username, email, senha) VALUES 
+('admin', 'admin@syrah.com', '$2y$10$8tGmHy1Zx3N9Zx3N9Zx3N.9Zx3N9Zx3N9Zx3N9Zx3N9Zx3N9Zx3N9'); 

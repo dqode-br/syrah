@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYRAH - Sistema ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --secondary-color: #ffffff;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --input-bg: #2d2d2d;
+            --input-text-color: #ffffff;
+            --text-muted: #a0a0a0;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --secondary-bg: #2d2d2d;
+            --hover-bg: #333333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px; /* Largura da sidebar */
+            padding: 2rem;
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            min-height: 100vh;
+            width: calc(100% - 250px); /* Largura total menos a sidebar */
+        }
+
+        .content-section {
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            display: none; /* Esconde todas as seções por padrão */
+        }
+
+        .content-section.active {
+            display: block; /* Mostra apenas a seção ativa */
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2a2f35 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .login-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .login-form label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .login-form input {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--input-text-color);
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .login-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-form button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 104, 255, 0.3);
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--input-text-color) !important;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ajuste específico para campos com máscara */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            color: var(--input-text-color) !important;
+            background-color: var(--input-bg) !important;
+        }
+
+        /* Ajuste para o placeholder das máscaras */
+        .jquery-mask-placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* Ajuste específico para campos de email */
+        input[type="email"] {
+            background-color: var(--input-bg) !important;
+            border: 2px solid var(--border-color) !important;
+        }
+
+        input[type="email"]:focus {
+            background-color: var(--input-bg) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2) !important;
+        }
+
+        /* Ajuste para os selects */
+        .form-select {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--input-text-color) !important;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select option {
+            background-color: var(--card-bg);
+            color: var(--input-text-color);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 104, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ajuste para as tabelas */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table th {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Modals */
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 104, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            border: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--hover-bg);
+            border: var(--border-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Ajuste para os botões de ação nas tabelas */
+        .btn-action {
+            padding: 0.5rem;
+            margin: 0 0.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Main Layout */
+        #app {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(0, 104, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .user-info {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .user-info .user-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info .user-email {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px; /* Largura da sidebar */
+            padding: 2rem;
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            min-height: 100vh;
+            width: calc(100% - 250px); /* Largura total menos a sidebar */
+        }
+
+        .content-section {
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            display: none; /* Esconde todas as seções por padrão */
+        }
+
+        .content-section.active {
+            display: block; /* Mostra apenas a seção ativa */
+        }
+
+        .content-section .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .card-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .card-body {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        .content-section .table {
+            color: var(--secondary-color);
+            background-color: var(--card-bg);
+        }
+
+        .content-section .table th {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .content-section .table td {
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+            background-color: var(--card-bg);
+        }
+
+        .content-section .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .content-section .form-control,
+        .content-section .form-select {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--input-text-color);
+        }
+
+        .content-section .form-control:focus,
+        .content-section .form-select:focus {
+            background-color: var(--input-bg);
+            border-color: var(--primary-color);
+            color: var(--input-text-color);
+        }
+
+        .content-section .form-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .content-section .btn-secondary {
+            background-color: var(--secondary-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .btn-secondary:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .alert {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .content-section .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .content-section .alert-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .content-section .pagination .page-link {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .content-section .pagination .page-link:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        /* Ajustes específicos para textos */
+        .content-section h1, 
+        .content-section h2, 
+        .content-section h3, 
+        .content-section h4, 
+        .content-section h5, 
+        .content-section h6 {
+            color: var(--secondary-color);
+        }
+
+        .content-section p {
+            color: var(--secondary-color);
+        }
+
+        .content-section label {
+            color: var(--secondary-color);
+        }
+
+        .content-section small {
+            color: var(--text-muted);
+        }
+
+        /* Ajuste para inputs e selects */
+        .content-section input,
+        .content-section select,
+        .content-section textarea {
+            background-color: var(--input-bg) !important;
+            color: var(--input-text-color) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        .content-section input::placeholder,
+        .content-section select::placeholder,
+        .content-section textarea::placeholder {
+            color: var(--text-muted) !important;
+        }
+
+        /* Estilos específicos dos modais do financeiro */
+        #contaReceberModal .modal-content,
+        #contaPagarModal .modal-content,
+        #remessaModal .modal-content,
+        #relatorioModal .modal-content {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para os cards do financeiro */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .card-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        .card-title {
+            color: var(--secondary-color);
+            margin: 0;
+        }
+
+        .card-body {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para as tabelas dentro dos cards */
+        .card .table {
+            color: var(--secondary-color);
+        }
+
+        .card .table thead th {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .card .table tbody tr {
+            background-color: var(--card-bg);
+        }
+
+        .card .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Estilos para os formulários dentro dos cards */
+        .card .form-control,
+        .card .form-select {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .card .form-control:focus,
+        .card .form-select:focus {
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .card .form-label {
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para os botões dentro dos cards */
+        .card .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .card .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .card .btn-secondary {
+            background-color: var(--secondary-bg);
+            color: var(--secondary-color);
+        }
+
+        .card .btn-secondary:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Estilos para os status nas tabelas */
+        .status-pago {
+            color: var(--success-color);
+        }
+
+        .status-pendente {
+            color: var(--warning-color);
+        }
+
+        .status-atrasado {
+            color: var(--danger-color);
+        }
+
+        /* Estilos para os códigos nas tabelas */
+        .codigo-item {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(0, 104, 255, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        /* Estilos para os formulários de login */
+        .forgot-password-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .forgot-password-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        /* Estilos para o modal de recuperação de senha */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Estilos para os campos de documento */
+        .documento-field {
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Estilos para os grupos de campos condicionais */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Estilos para campos ocultos */
+        .form-group[style*="display: none"] {
+            display: none !important;
+        }
+
+        /* Ajustes para campos de CPF e CNPJ */
+        .cpf-mask, .cnpj-mask {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Estilos para campos desabilitados */
+        .form-control:disabled,
+        .form-select:disabled {
+            background-color: var(--secondary-bg);
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            opacity: 0.6;
+        }
+
+        /* Ajustes para formulários em modais */
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-body {
+            background-color: var(--card-bg);
+        }
+
+        .modal-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Ajustes para labels e inputs em formulários */
+        .form-label {
+            color: var(--secondary-color);
+        }
+
+        .form-control, .form-select {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--input-text-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--input-bg);
+            border-color: var(--primary-color);
+            color: var(--input-text-color);
+        }
+
+        /* Ajuste para o texto dentro dos inputs */
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Ajuste para os botões nos formulários */
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        /* Estilos para as seções de conteúdo */
+        .content-section {
+            background-color: var(--dark-bg);
+            color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-section .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .card-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .card-body {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+        }
+
+        .content-section .table {
+            color: var(--secondary-color);
+        }
+
+        .content-section .table th {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .content-section .table td {
+            border-bottom: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .content-section .form-control,
+        .content-section .form-select {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--input-text-color);
+        }
+
+        .content-section .form-control:focus,
+        .content-section .form-select:focus {
+            background-color: var(--input-bg);
+            border-color: var(--primary-color);
+            color: var(--input-text-color);
+        }
+
+        .content-section .form-label {
+            color: var(--secondary-color);
+        }
+
+        .content-section .btn-secondary {
+            background-color: var(--secondary-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .btn-secondary:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .alert {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .content-section .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .content-section .alert-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .content-section .pagination .page-link {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .content-section .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .content-section .pagination .page-link:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-card .value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .dashboard-card .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="assets/images/logo.svg" alt="SYRAH Logo" class="login-logo">
+            </div>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Recuperação de Senha -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Recuperar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="handleForgotPassword(event)">
+                        <div class="mb-3">
+                            <label for="recoveryEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="recoveryEmail" placeholder="Digite seu email" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Enviar Link de Recuperação</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aplicação Principal -->
+    <div id="app" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/logo.svg" alt="SYRAH Logo" class="sidebar-logo">
+                <h3>Sistema ERP</h3>
+            </div>
+            <nav>
+                <ul class="sidebar-menu">
+                    <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" onclick="showSection('clientes')"><i class="fas fa-users"></i> Clientes</a></li>
+                    <li><a href="#" onclick="showSection('fornecedores')"><i class="fas fa-truck"></i> Fornecedores</a></li>
+                    <li><a href="#" onclick="showSection('documentos')"><i class="fas fa-file-alt"></i> Documentos</a></li>
+                    <li><a href="#" onclick="showSection('financeiro')"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-name">Usuário</div>
+                    <div class="user-email">usuario@empresa.com</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <div id="dashboard" class="content-section active">
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <h3>Total de Clientes</h3>
+                        <div class="value" id="totalClientes">0</div>
+                        <div class="label">Clientes cadastrados</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total de Fornecedores</h3>
+                        <div class="value" id="totalFornecedores">0</div>
+                        <div class="label">Fornecedores cadastrados</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total de Documentos</h3>
+                        <div class="value" id="totalDocumentos">0</div>
+                        <div class="label">Documentos registrados</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total de Contas</h3>
+                        <div class="value" id="totalContas">0</div>
+                        <div class="label">Contas financeiras</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clientes -->
+            <div id="clientes" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Clientes</h2>
+                    <button class="btn btn-primary" onclick="showModal('clienteModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>CNPJ/CPF</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fornecedores -->
+            <div id="fornecedores" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Fornecedores</h2>
+                    <button class="btn btn-primary" onclick="showModal('fornecedorModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>CNPJ</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fornecedoresList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Documentos -->
+            <div id="documentos" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Documentos</h2>
+                    <button class="btn btn-primary" onclick="showModal('documentoModal')">
+                        <i class="fas fa-plus"></i> Incluir
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Número</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Cliente/Fornecedor</th>
+                                <th>Valor Total</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documentosList">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Financeiro -->
+            <div id="financeiro" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Financeiro</h2>
+                    <div>
+                        <button class="btn btn-primary me-2" onclick="showModal('contaReceberModal')">
+                            <i class="fas fa-plus"></i> Incluir Conta a Receber
+                        </button>
+                        <button class="btn btn-primary me-2" onclick="showModal('contaPagarModal')">
+                            <i class="fas fa-plus"></i> Incluir Conta a Pagar
+                        </button>
+                        <button class="btn btn-primary me-2" onclick="showModal('remessaModal')">
+                            <i class="fas fa-file-export"></i> Gerar Remessa
+                        </button>
+                        <button class="btn btn-primary" onclick="showModal('relatorioModal')">
+                            <i class="fas fa-chart-bar"></i> Relatórios
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Contas a Receber</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contasReceberTable">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Contas a Pagar</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Descrição</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contasPagarTable">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modais -->
+    <!-- Cliente Modal -->
+    <div class="modal fade" id="clienteModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clienteForm" onsubmit="saveCliente(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nome*</label>
+                                <input type="text" class="form-control" name="nome" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="tipo_pessoa">Tipo de Pessoa</label>
+                                    <select class="form-select tipo-pessoa-select" id="tipo_pessoa" name="tipo_pessoa" required>
+                                        <option value="PF">Pessoa Física</option>
+                                        <option value="PJ">Pessoa Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" id="cpf_group">
+                                    <label for="cpf">CPF*</label>
+                                    <input type="text" class="form-control cpf-mask documento-field" id="cpf" name="cpf" placeholder="000.000.000-00">
+                                </div>
+                                <div class="form-group" id="cnpj_group">
+                                    <label for="cnpj">CNPJ*</label>
+                                    <input type="text" class="form-control cnpj-mask documento-field" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Email*</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Telefone*</label>
+                                <input type="tel" class="form-control" name="telefone" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Celular</label>
+                                <input type="tel" class="form-control" name="celular">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">CEP*</label>
+                                <input type="text" class="form-control" name="cep" required>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <label class="form-label">Endereço*</label>
+                                <input type="text" class="form-control" name="endereco" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Bairro*</label>
+                                <input type="text" class="form-control" name="bairro" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Código da Cidade*</label>
+                                <input type="text" class="form-control" name="codigo_cidade" placeholder="Ex: 3550308" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade*</label>
+                                <input type="text" class="form-control" name="cidade" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Estado*</label>
+                                <select class="form-select" name="estado" required>
+                                    <option value="">UF</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">País*</label>
+                                <input type="text" class="form-control" name="pais" value="Brasil" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo de Cliente*</label>
+                                <select class="form-select" name="tipo_cliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PF">Pessoa Física</option>
+                                    <option value="PJ">Pessoa Jurídica</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Regime Tributário*</label>
+                                <select class="form-select" name="regime_tributario" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="SIMPLES">Simples Nacional</option>
+                                    <option value="LUCRO_PRESUMIDO">Lucro Presumido</option>
+                                    <option value="LUCRO_REAL">Lucro Real</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Limite de Crédito</label>
+                                <input type="text" class="form-control" name="limite_credito">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Prazo de Pagamento</label>
+                                <input type="number" class="form-control" name="prazo_pagamento" min="0" max="365">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="clienteForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fornecedor Modal -->
+    <div class="modal fade" id="fornecedorModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Fornecedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fornecedorForm" onsubmit="saveFornecedor(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nome*</label>
+                                <input type="text" class="form-control" name="nome" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="tipo_pessoa_fornecedor">Tipo de Pessoa</label>
+                                    <select class="form-select tipo-pessoa-select" id="tipo_pessoa_fornecedor" name="tipo_pessoa" data-prefixo="_fornecedor" required>
+                                        <option value="PF">Pessoa Física</option>
+                                        <option value="PJ">Pessoa Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" id="cpf_group_fornecedor">
+                                    <label for="cpf_fornecedor">CPF*</label>
+                                    <input type="text" class="form-control cpf-mask documento-field" id="cpf_fornecedor" name="cpf" placeholder="000.000.000-00">
+                                </div>
+                                <div class="form-group" id="cnpj_group_fornecedor">
+                                    <label for="cnpj_fornecedor">CNPJ*</label>
+                                    <input type="text" class="form-control cnpj-mask documento-field" id="cnpj_fornecedor" name="cnpj" placeholder="00.000.000/0000-00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Inscrição Estadual</label>
+                                <input type="text" class="form-control" name="ie">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Email*</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Telefone*</label>
+                                <input type="tel" class="form-control" name="telefone" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Contato</label>
+                                <input type="text" class="form-control" name="contato">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">CEP*</label>
+                                <input type="text" class="form-control" name="cep" required>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <label class="form-label">Endereço*</label>
+                                <input type="text" class="form-control" name="endereco" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Bairro*</label>
+                                <input type="text" class="form-control" name="bairro" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Código da Cidade*</label>
+                                <input type="text" class="form-control" name="codigo_cidade" placeholder="Ex: 3550308" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade*</label>
+                                <input type="text" class="form-control" name="cidade" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Estado*</label>
+                                <select class="form-select" name="estado" required>
+                                    <option value="">UF</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">País*</label>
+                                <input type="text" class="form-control" name="pais" value="Brasil" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo de Fornecedor*</label>
+                                <select class="form-select" name="tipo_fornecedor" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PRODUTOS">Produtos</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="AMBOS">Produtos e Serviços</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Regime Tributário*</label>
+                                <select class="form-select" name="regime_tributario" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="SIMPLES">Simples Nacional</option>
+                                    <option value="LUCRO_PRESUMIDO">Lucro Presumido</option>
+                                    <option value="LUCRO_REAL">Lucro Real</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Prazo de Entrega</label>
+                                <input type="number" class="form-control" name="prazo_entrega" min="0" max="365">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Prazo de Pagamento</label>
+                                <input type="number" class="form-control" name="prazo_pagamento" min="0" max="365">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="fornecedorForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documento Modal -->
+    <div class="modal fade" id="documentoModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Documento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="documentoForm" onsubmit="saveDocumento(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Número*</label>
+                                <input type="text" class="form-control" name="numero" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Data*</label>
+                                <input type="date" class="form-control" name="data" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Tipo de Documento*</label>
+                                <select class="form-select" name="tipo_documento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ENTRADA">Entrada</option>
+                                    <option value="SAIDA">Saída</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Tipo*</label>
+                                <select class="form-select" name="tipo" required>
+                                    <option value="NFE">Nota Fiscal Eletrônica</option>
+                                    <option value="NFS">Nota Fiscal de Serviço</option>
+                                    <option value="CTE">Conhecimento de Transporte</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Aprovado">Aprovado</option>
+                                    <option value="Rejeitado">Rejeitado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cliente*</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="clienteSearch" placeholder="Buscar cliente...">
+                                    <select class="form-select" name="cliente_id" required>
+                                        <option value="">Selecione um cliente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Valor Total*</label>
+                                <input type="number" class="form-control" name="valor_total" step="0.01" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Condição de Pagamento*</label>
+                                <select class="form-select" name="condicao_pagamento" required>
+                                    <option value="A Vista">A Vista</option>
+                                    <option value="30 Dias">30 Dias</option>
+                                    <option value="60 Dias">60 Dias</option>
+                                    <option value="90 Dias">90 Dias</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Itens*</label>
+                                <div id="itensDocumento">
+                                    <div class="row mb-2">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" placeholder="Código" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" placeholder="Descrição" required>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control item-quantidade" placeholder="Qtd" required onchange="calcularTotal(this)">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control" placeholder="UN" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" class="form-control item-valor-unitario" placeholder="Valor Unit." step="0.01" required onchange="calcularTotal(this)">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control item-total" placeholder="Total" readonly>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="addItem()">Adicionar Item</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Informações Adicionais</label>
+                                <textarea class="form-control" name="info_adicionais" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="integrarFinanceiro" name="integrar_financeiro">
+                                    <label class="form-check-label" for="integrarFinanceiro">
+                                        Integrar com Financeiro
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="opcoesFinanceiro" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Tipo de Conta*</label>
+                                    <select class="form-select" name="tipo_conta" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="RECEBER">Conta a Receber</option>
+                                        <option value="PAGAR">Conta a Pagar</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Forma de Pagamento*</label>
+                                    <select class="form-select" name="forma_pagamento" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="DINHEIRO">Dinheiro</option>
+                                        <option value="PIX">PIX</option>
+                                        <option value="BOLETO">Boleto</option>
+                                        <option value="CARTAO">Cartão</option>
+                                        <option value="TRANSFERENCIA">Transferência</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Categoria*</label>
+                                    <select class="form-select" name="categoria" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="VENDAS">Vendas</option>
+                                        <option value="SERVICOS">Serviços</option>
+                                        <option value="COMPRAS">Compras</option>
+                                        <option value="IMPOSTOS">Impostos</option>
+                                        <option value="OUTROS">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDocumento()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Conta a Receber -->
+    <div class="modal fade" id="contaReceberModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Conta a Receber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contaReceberForm" onsubmit="saveContaReceber(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Descrição*</label>
+                                <input type="text" class="form-control" name="descricao" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Valor*</label>
+                                <input type="text" class="form-control" name="valor" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Vencimento*</label>
+                                <input type="date" class="form-control" name="vencimento" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PENDENTE">Pendente</option>
+                                    <option value="PAGO">Pago</option>
+                                    <option value="ATRASADO">Atrasado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Categoria*</label>
+                                <select class="form-select" name="categoria" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="VENDAS">Vendas</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="OUTROS">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Cliente*</label>
+                                <select class="form-select" name="cliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="CLI001">Empresa ABC Ltda</option>
+                                    <option value="CLI002">Comércio XYZ S.A.</option>
+                                    <option value="CLI003">Indústria 123 EIRELI</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Forma de Recebimento*</label>
+                                <select class="form-select" name="forma_recebimento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="DINHEIRO">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="BOLETO">Boleto</option>
+                                    <option value="CARTAO">Cartão</option>
+                                    <option value="TRANSFERENCIA">Transferência</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Número do Documento</label>
+                                <input type="text" class="form-control" name="numero_documento">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data de Emissão</label>
+                                <input type="date" class="form-control" name="data_emissao">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <!-- Campos de conta a receber -->
+                        <div class="row">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="contaReceberForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Conta a Pagar -->
+    <div class="modal fade" id="contaPagarModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Conta a Pagar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contaPagarForm" onsubmit="saveContaPagar(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Descrição*</label>
+                                <input type="text" class="form-control" name="descricao" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Valor*</label>
+                                <input type="text" class="form-control" name="valor" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Vencimento*</label>
+                                <input type="date" class="form-control" name="vencimento" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Status*</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PENDENTE">Pendente</option>
+                                    <option value="PAGO">Pago</option>
+                                    <option value="ATRASADO">Atrasado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Categoria*</label>
+                                <select class="form-select" name="categoria" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="COMPRAS">Compras</option>
+                                    <option value="SERVICOS">Serviços</option>
+                                    <option value="IMPOSTOS">Impostos</option>
+                                    <option value="FOLHA_PAGAMENTO">Folha de Pagamento</option>
+                                    <option value="OUTROS">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Fornecedor*</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fornecedorSearch" placeholder="Buscar fornecedor...">
+                                    <select class="form-select" name="fornecedor_id" required>
+                                        <option value="">Selecione um fornecedor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Forma de Pagamento*</label>
+                                <select class="form-select" name="forma_pagamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="DINHEIRO">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="BOLETO">Boleto</option>
+                                    <option value="CARTAO">Cartão</option>
+                                    <option value="TRANSFERENCIA">Transferência</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Número do Documento</label>
+                                <input type="text" class="form-control" name="numero_documento">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data de Emissão</label>
+                                <input type="date" class="form-control" name="data_emissao">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" name="observacoes" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <!-- Campos de conta a pagar -->
+                        <div class="row">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="contaPagarForm" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Remessa -->
+    <div class="modal fade" id="remessaModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Gerar Remessa Bancária</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="remessaForm" onsubmit="gerarRemessa(event)">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Banco*</label>
+                                <select class="form-select" name="banco" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="001">Banco do Brasil</option>
+                                    <option value="033">Santander</option>
+                                    <option value="104">Caixa Econômica Federal</option>
+                                    <option value="237">Bradesco</option>
+                                    <option value="341">Itaú</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Agência*</label>
+                                <input type="text" class="form-control" name="agencia" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Conta*</label>
+                                <input type="text" class="form-control" name="conta" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Data de Vencimento Inicial*</label>
+                                <input type="date" class="form-control" name="data_inicial" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Data de Vencimento Final*</label>
+                                <input type="date" class="form-control" name="data_final" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Contas Selecionadas</label>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="selectAll"></th>
+                                                <th>Descrição</th>
+                                                <th>Cliente</th>
+                                                <th>Valor</th>
+                                                <th>Vencimento</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contasRemessaTable">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="remessaForm" class="btn btn-primary">Gerar Remessa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Relatórios -->
+    <div class="modal fade" id="relatorioModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Relatórios Financeiros</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Contas a Receber</h5>
+                                    <p class="card-text">Relatório detalhado das contas a receber</p>
+                                    <button class="btn btn-primary" onclick="gerarRelatorio('receber')">Gerar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Contas a Pagar</h5>
+                                    <p class="card-text">Relatório detalhado das contas a pagar</p>
+                                    <button class="btn btn-primary" onclick="gerarRelatorio('pagar')">Gerar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Fluxo de Caixa</h5>
+                                    <p class="card-text">Relatório de fluxo de caixa mensal</p>
+                                    <button class="btn btn-primary" onclick="gerarRelatorio('fluxo')">Gerar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">DRE</h5>
+                                    <p class="card-text">Demonstrativo de Resultado do Exercício</p>
+                                    <button class="btn btn-primary" onclick="gerarRelatorio('dre')">Gerar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        // Função para lidar com o login
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Aqui você implementaria a chamada real para a API
+                // Por enquanto, vamos simular um login bem-sucedido
+                if (username && password) {
+                    // Simular resposta da API
+                    const user = {
+                        id: 1,
+                        username: username.split('@')[0], // Pega apenas o nome antes do @
+                        email: username // Usa o email completo do login
+                    };
+
+                    // Esconder tela de login e mostrar aplicação
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('app').style.display = 'flex';
+
+                    // Atualizar informações do usuário
+                    updateUserInfo(user);
+
+                    // Redirecionar para a página inicial (dashboard)
+                    showSection('dashboard');
+                } else {
+                    alert('Por favor, preencha todos os campos');
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('Erro ao fazer login');
+            }
+        }
+
+        // Função para atualizar as informações do usuário na sidebar
+        function updateUserInfo(user) {
+            document.querySelector('.user-info .user-name').textContent = user.username;
+            document.querySelector('.user-info .user-email').textContent = user.email;
+        }
+
+        // Função para mostrar o modal de recuperação de senha
+        function showForgotPasswordModal(event) {
+            event.preventDefault();
+            const modalElement = document.getElementById('forgotPasswordModal');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+
+        // Função para lidar com a recuperação de senha
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('recoveryEmail').value;
+            
+            try {
+                // Aqui você implementaria a chamada real para a API
+                alert('Link de recuperação enviado para seu email!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+                modal.hide();
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar link de recuperação');
+            }
+        }
+
+        // Função para mostrar seção
+        function showSection(section) {
+            // Esconde todas as seções
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.style.display = 'none';
+            });
+
+            // Mostra a seção selecionada
+            document.getElementById(section).style.display = 'block';
+
+            // Atualiza o menu ativo
+            document.querySelectorAll('.sidebar-menu a').forEach(a => {
+                a.classList.remove('active');
+            });
+            document.querySelector(`.sidebar-menu a[onclick="showSection('${section}')"]`).classList.add('active');
+
+            // Carrega os dados da seção
+            switch(section) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'clientes':
+                    loadClientes();
+                    break;
+                case 'fornecedores':
+                    loadFornecedores();
+                    break;
+                case 'documentos':
+                    loadDocumentos();
+                    break;
+                case 'financeiro':
+                    loadFinanceiro();
+                    break;
+            }
+        }
+
+        // Função para buscar próximo código de cliente
+        async function getNextClienteCode() {
+            try {
+                const response = await fetch('/api/cadastros/clientes/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'CLI0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'CLI0000000001';
+            }
+        }
+
+        // Função para buscar próximo código de fornecedor
+        async function getNextFornecedorCode() {
+            try {
+                const response = await fetch('/api/cadastros/fornecedores/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'FOR0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'FOR0000000001';
+            }
+        }
+
+        // Função para buscar próximo código de documento
+        async function getNextDocumentoCode() {
+            try {
+                const response = await fetch('/api/documentos/next-code');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.codigo;
+                }
+                return 'DOC0000000001';
+            } catch (error) {
+                console.error('Erro ao buscar código:', error);
+                return 'DOC0000000001';
+            }
+        }
+
+        // Função para mostrar modal
+        async function showModal(modalId) {
+            const modal = new bootstrap.Modal(document.getElementById(modalId));
+            
+            // Limpar formulários e buscar próximo código quando o modal for aberto
+            if (modalId === 'clienteModal') {
+                document.getElementById('clienteForm').reset();
+                const nextCode = await getNextClienteCode();
+                document.querySelector('#clienteForm input[name="codigo"]').value = nextCode;
+            } else if (modalId === 'fornecedorModal') {
+                document.getElementById('fornecedorForm').reset();
+                const nextCode = await getNextFornecedorCode();
+                document.querySelector('#fornecedorForm input[name="codigo"]').value = nextCode;
+            } else if (modalId === 'documentoModal') {
+                document.getElementById('documentoForm').reset();
+                const nextCode = await getNextDocumentoCode();
+                document.querySelector('#documentoForm input[name="codigo"]').value = nextCode;
+            }
+            
+            modal.show();
+        }
+
+        // Funções de carregamento de dados
+        async function loadDashboard() {
+            try {
+                const [clientes, fornecedores, documentos, contas] = await Promise.all([
+                    fetchData('/cadastros/clientes/'),
+                    fetchData('/cadastros/fornecedores/'),
+                    fetchData('/documentos/'),
+                    fetchData('/financeiro/contas/')
+                ]);
+
+                document.getElementById('totalClientes').textContent = clientes.length;
+                document.getElementById('totalFornecedores').textContent = fornecedores.length;
+                document.getElementById('totalDocumentos').textContent = documentos.length;
+                document.getElementById('totalContas').textContent = contas.length;
+            } catch (error) {
+                console.error('Erro ao carregar dashboard:', error);
+            }
+        }
+
+        async function loadClientes() {
+            try {
+                const clientes = await fetchData('/cadastros/clientes/');
+                const tbody = document.getElementById('clientesList');
+                tbody.innerHTML = '';
+
+                clientes.forEach(cliente => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${cliente.codigo}</span></td>
+                            <td>${cliente.nome}</td>
+                            <td>${cliente.cnpj_cpf}</td>
+                            <td>${cliente.email}</td>
+                            <td>${cliente.telefone}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-action" onclick="editCliente(${cliente.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deleteCliente(${cliente.id})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+            }
+        }
+
+        async function loadFornecedores() {
+            try {
+                const fornecedores = await fetchData('/cadastros/fornecedores/');
+                const tbody = document.getElementById('fornecedoresList');
+                tbody.innerHTML = '';
+
+                fornecedores.forEach(fornecedor => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${fornecedor.codigo}</span></td>
+                            <td>${fornecedor.nome}</td>
+                            <td>${fornecedor.cnpj}</td>
+                            <td>${fornecedor.email}</td>
+                            <td>${fornecedor.telefone}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-action" onclick="editFornecedor(${fornecedor.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deleteFornecedor(${fornecedor.id})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar fornecedores:', error);
+            }
+        }
+
+        async function loadDocumentos() {
+            try {
+                const documentos = await fetchData('/documentos/');
+                const tbody = document.getElementById('documentosList');
+                tbody.innerHTML = '';
+
+                documentos.forEach(documento => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span class="codigo-item">${documento.codigo}</span></td>
+                            <td>${documento.numero}</td>
+                            <td>${new Date(documento.data).toLocaleDateString()}</td>
+                            <td>${documento.tipo}</td>
+                            <td>${documento.status}</td>
+                            <td>${documento.cliente_id ? 'Cliente' : 'Fornecedor'}</td>
+                            <td>R$ ${documento.valor_total.toFixed(2)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-action" onclick="editDocumento(${documento.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deleteDocumento(${documento.id})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar documentos:', error);
+            }
+        }
+
+        // Função para carregar dados do financeiro
+        async function loadFinanceiro() {
+            try {
+                // Carregar contas a receber
+                const contasReceber = await fetchData('/financeiro/contas-receber/');
+                const tbodyReceber = document.getElementById('contasReceberTable');
+                tbodyReceber.innerHTML = '';
+                
+                contasReceber.forEach(conta => {
+                    tbodyReceber.innerHTML += `
+                        <tr>
+                            <td>${conta.descricao}</td>
+                            <td>R$ ${conta.valor}</td>
+                            <td>${new Date(conta.vencimento).toLocaleDateString()}</td>
+                            <td>${conta.status}</td>
+                        </tr>
+                    `;
+                });
+
+                // Carregar contas a pagar
+                const contasPagar = await fetchData('/financeiro/contas-pagar/');
+                const tbodyPagar = document.getElementById('contasPagarTable');
+                tbodyPagar.innerHTML = '';
+                
+                contasPagar.forEach(conta => {
+                    tbodyPagar.innerHTML += `
+                        <tr>
+                            <td>${conta.descricao}</td>
+                            <td>R$ ${conta.valor}</td>
+                            <td>${new Date(conta.vencimento).toLocaleDateString()}</td>
+                            <td>${conta.status}</td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Erro ao carregar dados financeiros:', error);
+            }
+        }
+
+        // Função para gerar uniqkey
+        function generateUniqKey() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Função para salvar cliente
+        async function saveCliente(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Validar CPF/CNPJ
+            const tipoPessoa = formData.get('tipo_pessoa');
+            let documento = '';
+            
+            if (tipoPessoa === 'PF') {
+                documento = formData.get('cpf').replace(/\D/g, '');
+                if (documento.length !== 11) {
+                    alert('CPF inválido!');
+                    return;
+                }
+            } else {
+                documento = formData.get('cnpj').replace(/\D/g, '');
+                if (documento.length !== 14) {
+                    alert('CNPJ inválido!');
+                    return;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/cadastros/clientes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Cliente salvo com sucesso!');
+                    $('#clienteModal').modal('hide');
+                    loadClientes();
+                    loadClientesSelect();
+                } else {
+                    alert('Erro ao salvar cliente');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar cliente');
+            }
+        }
+
+        // Função para salvar fornecedor
+        async function saveFornecedor(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Validar CPF/CNPJ
+            const tipoPessoa = formData.get('tipo_pessoa');
+            let documento = '';
+            
+            if (tipoPessoa === 'PF') {
+                documento = formData.get('cpf').replace(/\D/g, '');
+                if (documento.length !== 11) {
+                    alert('CPF inválido!');
+                    return;
+                }
+            } else {
+                documento = formData.get('cnpj').replace(/\D/g, '');
+                if (documento.length !== 14) {
+                    alert('CNPJ inválido!');
+                    return;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/cadastros/fornecedores/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Fornecedor salvo com sucesso!');
+                    $('#fornecedorModal').modal('hide');
+                    loadFornecedores();
+                    loadFornecedoresSelect();
+                } else {
+                    alert('Erro ao salvar fornecedor');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar fornecedor');
+            }
+        }
+
+        // Função para buscar dados (simulação)
+        async function fetchData(endpoint) {
+            // Simulação de dados para demonstração
+            const mockData = {
+                '/cadastros/clientes/': [
+                    { id: 1, codigo: 'CLI001', nome: 'Empresa ABC Ltda', cnpj_cpf: '12.345.678/0001-90', email: 'contato@abc.com', telefone: '(11) 1234-5678' },
+                    { id: 2, codigo: 'CLI002', nome: 'João Silva', cnpj_cpf: '123.456.789-00', email: 'joao@email.com', telefone: '(11) 9876-5432' }
+                ],
+                '/cadastros/fornecedores/': [
+                    { id: 1, codigo: 'FOR001', nome: 'Fornecedor XYZ S.A.', cnpj: '98.765.432/0001-10', email: 'vendas@xyz.com', telefone: '(11) 5555-1234' }
+                ],
+                '/documentos/': [
+                    { id: 1, codigo: 'DOC001', numero: '000001', data: '2024-01-15', tipo: 'NFE', status: 'Aprovado', cliente_id: 1, valor_total: 1500.00 }
+                ],
+                '/financeiro/contas/': [],
+                '/financeiro/contas-receber/': [
+                    { id: 1, descricao: 'Venda de produtos', valor: '1500.00', vencimento: '2024-02-15', status: 'Pendente' }
+                ],
+                '/financeiro/contas-pagar/': [
+                    { id: 1, descricao: 'Compra de materiais', valor: '800.00', vencimento: '2024-02-10', status: 'Pendente' }
+                ]
+            };
+
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(mockData[endpoint] || []);
+                }, 500);
+            });
+        }
+
+        // Inicialização do jQuery e máscaras
+        $(document).ready(function() {
+            // Função para aplicar máscara de CPF
+            function aplicarMascaraCPF(campo) {
+                $(campo).mask('000.000.000-00', {
+                    placeholder: "000.000.000-00",
+                    clearIfNotMatch: true,
+                    reverse: false
+                });
+            }
+
+            // Função para aplicar máscara de CNPJ
+            function aplicarMascaraCNPJ(campo) {
+                $(campo).mask('00.000.000/0000-00', {
+                    placeholder: "00.000.000/0000-00",
+                    clearIfNotMatch: true,
+                    reverse: false
+                });
+            }
+
+            // Aplicar máscaras inicialmente
+            aplicarMascaraCPF('#cpf');
+            aplicarMascaraCPF('#cpf_fornecedor');
+            aplicarMascaraCNPJ('#cnpj');
+            aplicarMascaraCNPJ('#cnpj_fornecedor');
+
+            // Função para controlar campos de documento
+            function controlarCamposDocumento(tipo, prefixo = '') {
+                const cpfGroup = $(`#cpf_group${prefixo}`);
+                const cnpjGroup = $(`#cnpj_group${prefixo}`);
+                const cpfInput = $(`#cpf${prefixo}`);
+                const cnpjInput = $(`#cnpj${prefixo}`);
+
+                if (tipo === 'PF') {
+                    cpfGroup.show();
+                    cnpjGroup.hide();
+                    cpfInput.prop('required', true).prop('disabled', false);
+                    cnpjInput.prop('required', false).prop('disabled', true).val('');
+                } else {
+                    cpfGroup.hide();
+                    cnpjGroup.show();
+                    cpfInput.prop('required', false).prop('disabled', true).val('');
+                    cnpjInput.prop('required', true).prop('disabled', false);
+                }
+            }
+
+            // Eventos para tipo de pessoa
+            $('.tipo-pessoa-select').on('change', function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+
+            // Inicializar controles quando modais são abertos
+            $('#clienteModal, #fornecedorModal').on('show.bs.modal', function() {
+                const prefixo = $(this).attr('id') === 'clienteModal' ? '' : '_fornecedor';
+                const tipoPessoa = $(`#tipo_pessoa${prefixo}`).val();
+                controlarCamposDocumento(tipoPessoa, prefixo);
+            });
+
+            // Inicializar controles
+            $('.tipo-pessoa-select').each(function() {
+                const prefixo = $(this).data('prefixo') || '';
+                controlarCamposDocumento($(this).val(), prefixo);
+            });
+        });
+
+        // Função para adicionar item na lista de itens do documento
+        function addItem() {
+            const itensContainer = document.getElementById('itensDocumento');
+            const newItem = document.createElement('div');
+            newItem.className = 'row mb-2';
+            newItem.innerHTML = `
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Código" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Descrição" required>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control item-quantidade" placeholder="Qtd" required onchange="calcularTotal(this)">
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" placeholder="UN" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control item-valor-unitario" placeholder="Valor Unit." step="0.01" required onchange="calcularTotal(this)">
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control item-total" placeholder="Total" readonly>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+            itensContainer.appendChild(newItem);
+        }
+
+        // Função para remover item da lista de itens do documento
+        function removeItem(button) {
+            const row = button.closest('.row');
+            if (document.querySelectorAll('#itensDocumento .row').length > 1) {
+                row.remove();
+                calcularValorTotal();
+            } else {
+                alert('Deve haver pelo menos um item no documento.');
+            }
+        }
+
+        // Função para calcular o total de um item
+        function calcularTotal(input) {
+            const row = input.closest('.row');
+            const quantidade = row.querySelector('.item-quantidade').value || 0;
+            const valorUnitario = row.querySelector('.item-valor-unitario').value || 0;
+            const total = quantidade * valorUnitario;
+            row.querySelector('.item-total').value = total.toFixed(2);
+            calcularValorTotal();
+        }
+
+        // Função para calcular o valor total do documento
+        function calcularValorTotal() {
+            const totaisItens = document.querySelectorAll('.item-total');
+            let valorTotal = 0;
+            totaisItens.forEach(item => {
+                valorTotal += parseFloat(item.value) || 0;
+            });
+            const campoValorTotal = document.querySelector('input[name="valor_total"]');
+            if (campoValorTotal) {
+                campoValorTotal.value = valorTotal.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>
+
