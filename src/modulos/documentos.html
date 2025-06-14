@@ -1,0 +1,148 @@
+<div id="documentos" class="content-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Documentos</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#documentoModal">
+            <i class="fas fa-plus me-2"></i>Novo Documento
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar por descrição...">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <select class="form-select">
+                        <option value="">Tipo de Documento</option>
+                        <option value="nota">Nota Fiscal</option>
+                        <option value="contrato">Contrato</option>
+                        <option value="relatorio">Relatório</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <select class="form-select">
+                        <option value="">Ordenar por</option>
+                        <option value="data">Data de Upload</option>
+                        <option value="tipo">Tipo</option>
+                        <option value="nome">Nome</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <button class="btn btn-secondary w-100">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Documentos -->
+    <div class="card bg-dark text-light">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome do Arquivo</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Data de Upload</th>
+                            <th>Usuário</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>nota_fiscal_001.pdf</td>
+                            <td><span class="badge bg-primary">Nota Fiscal</span></td>
+                            <td>Nota fiscal de compra de materiais</td>
+                            <td>15/03/2024</td>
+                            <td>João Silva</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>contrato_fornecedor_xyz.pdf</td>
+                            <td><span class="badge bg-success">Contrato</span></td>
+                            <td>Contrato com fornecedor XYZ</td>
+                            <td>14/03/2024</td>
+                            <td>Maria Santos</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>relatorio_vendas_2024.pdf</td>
+                            <td><span class="badge bg-danger">Relatório</span></td>
+                            <td>Relatório de vendas do primeiro trimestre</td>
+                            <td>13/03/2024</td>
+                            <td>Pedro Oliveira</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginação -->
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funções específicas do módulo de documentos
+    function downloadDocumento(id) {
+        // Implementar lógica de download
+    }
+
+    function editarDocumento(id) {
+        // Implementar lógica de edição
+    }
+
+    function excluirDocumento(id) {
+        if (confirm('Tem certeza que deseja excluir este documento?')) {
+            // Implementar lógica de exclusão
+        }
+    }
+</script> 

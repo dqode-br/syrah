@@ -1,0 +1,48 @@
+<aside class="sidebar bg-dark" style="width: 250px; height: 100vh; position: fixed; left: 0; top: 0; padding: 1rem;">
+    <div class="sidebar-header mb-4">
+        <img src="assets/img/logo.png" alt="SYRAH Logo" style="width: 120px; height: auto;">
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-light" onclick="showSection('dashboard')">
+                    <i class="fas fa-home me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-light" onclick="showSection('clientes')">
+                    <i class="fas fa-users me-2"></i> Clientes
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-light" onclick="showSection('fornecedores')">
+                    <i class="fas fa-truck me-2"></i> Fornecedores
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-light" onclick="showSection('documentos')">
+                    <i class="fas fa-file-alt me-2"></i> Documentos
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-light" onclick="showSection('financeiro')">
+                    <i class="fas fa-dollar-sign me-2"></i> Financeiro
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer mt-auto" style="position: absolute; bottom: 1rem; width: calc(100% - 2rem);">
+        <button class="btn btn-danger w-100" onclick="logout()">
+            <i class="fas fa-sign-out-alt me-2"></i> Sair
+        </button>
+    </div>
+</aside>
+
+<script>
+    function logout() {
+        // Implementar lógica de logout
+        window.location.href = 'login.html';
+    }
+</script> 

@@ -1,0 +1,145 @@
+<!-- Modal de Cliente -->
+<div class="modal fade" id="clienteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastro de Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="clienteForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nomeCliente" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nomeCliente" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="emailCliente" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="emailCliente" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefoneCliente" class="form-label">Telefone</label>
+                            <input type="tel" class="form-control" id="telefoneCliente" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cpfCliente" class="form-label">CPF</label>
+                            <input type="text" class="form-control" id="cpfCliente" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enderecoCliente" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="enderecoCliente" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarCliente()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Fornecedor -->
+<div class="modal fade" id="fornecedorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastro de Fornecedor</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="fornecedorForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nomeFornecedor" class="form-label">Nome/Razão Social</label>
+                            <input type="text" class="form-control" id="nomeFornecedor" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cnpjFornecedor" class="form-label">CNPJ</label>
+                            <input type="text" class="form-control" id="cnpjFornecedor" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="emailFornecedor" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="emailFornecedor" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="telefoneFornecedor" class="form-label">Telefone</label>
+                            <input type="tel" class="form-control" id="telefoneFornecedor" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="enderecoFornecedor" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="enderecoFornecedor" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarFornecedor()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Documento -->
+<div class="modal fade" id="documentoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Documento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="documentoForm">
+                    <div class="mb-3">
+                        <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                        <select class="form-select" id="tipoDocumento" required>
+                            <option value="">Selecione...</option>
+                            <option value="nota">Nota Fiscal</option>
+                            <option value="contrato">Contrato</option>
+                            <option value="relatorio">Relatório</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descricaoDocumento" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricaoDocumento" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="arquivoDocumento" class="form-label">Arquivo</label>
+                        <input type="file" class="form-control" id="arquivoDocumento" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarDocumento()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funções para salvar os dados dos modais
+    function salvarCliente() {
+        // Implementar lógica de salvamento
+        const modal = bootstrap.Modal.getInstance(document.getElementById('clienteModal'));
+        modal.hide();
+    }
+
+    function salvarFornecedor() {
+        // Implementar lógica de salvamento
+        const modal = bootstrap.Modal.getInstance(document.getElementById('fornecedorModal'));
+        modal.hide();
+    }
+
+    function salvarDocumento() {
+        // Implementar lógica de salvamento
+        const modal = bootstrap.Modal.getInstance(document.getElementById('documentoModal'));
+        modal.hide();
+    }
+</script> 

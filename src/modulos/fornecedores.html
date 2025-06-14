@@ -1,0 +1,133 @@
+<div id="fornecedores" class="content-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Fornecedores</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fornecedorModal">
+            <i class="fas fa-plus me-2"></i>Novo Fornecedor
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar por nome/razão social...">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <select class="form-select">
+                        <option value="">Status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <select class="form-select">
+                        <option value="">Ordenar por</option>
+                        <option value="nome">Nome/Razão Social</option>
+                        <option value="data">Data de Cadastro</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <button class="btn btn-secondary w-100">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Fornecedores -->
+    <div class="card bg-dark text-light">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome/Razão Social</th>
+                            <th>CNPJ</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Empresa ABC Ltda</td>
+                            <td>12.345.678/0001-90</td>
+                            <td>contato@empresaabc.com</td>
+                            <td>(11) 3333-3333</td>
+                            <td><span class="badge bg-success">Ativo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fornecedor XYZ S.A.</td>
+                            <td>98.765.432/0001-10</td>
+                            <td>contato@xyz.com</td>
+                            <td>(11) 4444-4444</td>
+                            <td><span class="badge bg-success">Ativo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Distribuidora 123</td>
+                            <td>45.678.901/0001-23</td>
+                            <td>contato@dist123.com</td>
+                            <td>(11) 5555-5555</td>
+                            <td><span class="badge bg-danger">Inativo</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginação -->
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funções específicas do módulo de fornecedores
+    function editarFornecedor(id) {
+        // Implementar lógica de edição
+    }
+
+    function excluirFornecedor(id) {
+        if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
+            // Implementar lógica de exclusão
+        }
+    }
+</script> 
